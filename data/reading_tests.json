@@ -1,0 +1,118 @@
+[
+  {
+    "id": "read-01",
+    "title": "Academic Reading Practice Test 1",
+    "subtitle": "The Rise of Smart Cities & The Future of Urban Living",
+    "difficulty": "Band 6.5 - 8.5",
+    "duration_minutes": 60,
+    "passages": [
+      {
+        "passage_number": 1,
+        "title": "The Evolution of Smart Cities",
+        "content": "A smart city is an urban area that uses different types of electronic methods and sensors to collect data. Insights gained from that data are used to manage assets, resources, and services efficiently; in return, that data is used to improve operations across the city. This includes data collected from citizens, devices, buildings, and assets that is processed and analyzed to monitor and manage traffic and transportation systems, power plants, utilities, water supply networks, waste, crime detection, information systems, schools, libraries, hospitals, and other community services.\n\nThe smart city concept integrates information and communication technology (ICT), and various physical devices connected to the IoT (Internet of Things) network to optimize the efficiency of city operations and services and connect to citizens. Smart city technology allows city officials to interact directly with both community and city infrastructure and to monitor what is happening in the city and how the city is evolving.\n\nCities worldwide are experiencing unprecedented population growth. According to the United Nations, by 2050, 68% of the world population is projected to be urban. This migration creates immense pressure on infrastructure, energy grids, and water systems. In response, metropolitan areas like Singapore, Barcelona, and Amsterdam have pioneered smart governance. Singapore, often heralded as the premier example, uses its 'Virtual Singapore' platform—a dynamic 3D city model and collaborative data platform—to simulate urban planning scenarios, solar energy potential, and wind flow between skyscrapers.\n\nHowever, the rollout of smart city initiatives is not without severe critique. Privacy advocates point out the ubiquitous surveillance required by facial recognition cameras and sensor grids. If a city tracks every commuter's footprint, vehicle movement, and utility consumption, the line between civic optimization and state surveillance blurs rapidly. Furthermore, cybersecurity experts warn that hyper-connected cities present unprecedented vulnerability to cyberattacks; a single exploit could cripple traffic networks or the power grid for millions of residents.",
+        "questions": [
+          {
+            "id": "q1",
+            "type": "true_false_not_given",
+            "question": "Smart cities only gather information related to traffic and transportation.",
+            "options": ["TRUE", "FALSE", "NOT GIVEN"],
+            "correct_answer": "FALSE",
+            "explanation": "Đoạn 1 nêu rõ: 'This includes data collected from citizens, devices, buildings... traffic, power plants, utilities, water, waste, crime, schools, hospitals...', do đó không chỉ thu thập thông tin giao thông."
+          },
+          {
+            "id": "q2",
+            "type": "true_false_not_given",
+            "question": "By 2050, more than two-thirds of the world's population is expected to reside in cities.",
+            "options": ["TRUE", "FALSE", "NOT GIVEN"],
+            "correct_answer": "TRUE",
+            "explanation": "Đoạn 3 chỉ ra: 'by 2050, 68% of the world population is projected to be urban' (68% tương đương hơn 2/3)."
+          },
+          {
+            "id": "q3",
+            "type": "true_false_not_given",
+            "question": "Singapore's 3D platform has successfully reduced the cost of electricity by 30%.",
+            "options": ["TRUE", "FALSE", "NOT GIVEN"],
+            "correct_answer": "NOT GIVEN",
+            "explanation": "Đoạn 3 nhắc đến nền tảng 'Virtual Singapore' dùng để mô phỏng quy hoạch và tiềm năng năng lượng mặt trời, nhưng bài đọc KHÔNG đề cập liệu nó có giúp giảm 30% tiền điện hay không."
+          },
+          {
+            "id": "q4",
+            "type": "multiple_choice",
+            "question": "What is the primary concern raised by privacy advocates regarding smart cities?",
+            "options": [
+              "High maintenance costs of modern sensors",
+              "The pervasive surveillance of citizens' daily activities",
+              "Lack of internet connection in rural suburbs",
+              "Delays in public transport schedules"
+            ],
+            "correct_answer": "The pervasive surveillance of citizens' daily activities",
+            "explanation": "Đoạn cuối viết: 'Privacy advocates point out the ubiquitous surveillance required by facial recognition cameras... the line between civic optimization and state surveillance blurs rapidly'."
+          },
+          {
+            "id": "q5",
+            "type": "fill_in_blank",
+            "question": "Hyper-connected cities are vulnerable because a cyberattack could disable either the traffic system or the ________.",
+            "correct_answer": "power grid",
+            "explanation": "Đoạn cuối viết: '...could cripple traffic networks or the power grid for millions of residents'."
+          }
+        ]
+      },
+      {
+        "passage_number": 2,
+        "title": "The Psychology of Intuition in High-Stakes Decisions",
+        "content": "For centuries, Western philosophy elevated deliberate, analytical reasoning as the pinnacle of human decision-making. Gut feelings and intuitive impulses were frequently dismissed as unscientific superstitions. However, over the past three decades, cognitive psychologists such as Daniel Kahneman and Gary Klein have fundamentally rewritten this orthodoxy, revealing the sophisticated architecture underlying our subconscious choices.\n\nIn his influential framework, Kahneman delineates two distinct modes of cognitive processing: System 1 and System 2. System 1 operates automatically, swiftly, and with minimal voluntary effort. It is associative, emotionally charged, and responsible for snap judgments, such as recognizing hostility in an opponent's voice or instinctively ducking when a projectile approaches. Conversely, System 2 allocates attention to effortful mental calculations, deliberative reasoning, and complex problem-solving. While System 2 prides itself on being the conscious pilot, it is computationally expensive, prone to cognitive fatigue, and remarkably lazy.\n\nGary Klein's research on Naturalistic Decision Making (NDM) further illuminates how intuition functions in extreme, time-compressed environments. Klein studied experienced firefighters, military commanders, and intensive care nurses. He discovered that when entering a burning building, seasoned fire captains rarely compare multiple courses of action. Instead, their subconscious instantly matches current perceptual cues—smoke density, temperature gradient, timber creaks—against thousands of internalized mental prototypes accumulated over years of experience. This process, termed 'Recognition-Primed Decision' (RPD), allows experts to generate a viable plan in milliseconds without calculating pros and cons.",
+        "questions": [
+          {
+            "id": "q6",
+            "type": "multiple_choice",
+            "question": "According to the passage, historically, Western philosophy viewed intuition as:",
+            "options": [
+              "Superior to mathematical logic",
+              "An unscientific and inferior form of judgment",
+              "The foundation of scientific discoveries",
+              "A uniquely divine human attribute"
+            ],
+            "correct_answer": "An unscientific and inferior form of judgment",
+            "explanation": "Đoạn 1 nêu rõ: 'Gut feelings and intuitive impulses were frequently dismissed as unscientific superstitions'."
+          },
+          {
+            "id": "q7",
+            "type": "multiple_choice",
+            "question": "Which of the following best characterizes Kahneman's 'System 1'?",
+            "options": [
+              "Slow, analytical, and highly deliberate",
+              "Fast, effortless, and associative",
+              "Requires extensive mathematical calculations",
+              "Easily tired and rarely prone to cognitive biases"
+            ],
+            "correct_answer": "Fast, effortless, and associative",
+            "explanation": "Đoạn 2 nêu: 'System 1 operates automatically, swiftly, and with minimal voluntary effort. It is associative, emotionally charged...'"
+          },
+          {
+            "id": "q8",
+            "type": "true_false_not_given",
+            "question": "Experienced firefighters usually list several strategies and analyze the benefits of each before acting.",
+            "options": ["TRUE", "FALSE", "NOT GIVEN"],
+            "correct_answer": "FALSE",
+            "explanation": "Đoạn 3 viết: 'seasoned fire captains rarely compare multiple courses of action. Instead, their subconscious instantly matches current perceptual cues...' (hiếm khi so sánh nhiều phương án)."
+          },
+          {
+            "id": "q9",
+            "type": "fill_in_blank",
+            "question": "Gary Klein coined the term '________' to describe the rapid matching of cues to past experiences.",
+            "correct_answer": "Recognition-Primed Decision",
+            "explanation": "Đoạn 3 viết: 'This process, termed Recognition-Primed Decision (RPD)...'"
+          },
+          {
+            "id": "q10",
+            "type": "true_false_not_given",
+            "question": "Daniel Kahneman received a Nobel Memorial Prize in Economic Sciences.",
+            "options": ["TRUE", "FALSE", "NOT GIVEN"],
+            "correct_answer": "NOT GIVEN",
+            "explanation": "Mặc dù ngoài đời Daniel Kahneman đoạt giải Nobel, nhưng trong nội dung bài đọc trên KHÔNG nhắc tới thông tin này."
+          }
+        ]
+      }
+    ]
+  }
+]

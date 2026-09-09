@@ -1,0 +1,94 @@
+[
+  {
+    "id": "list-01",
+    "title": "IELTS Listening Practice Test 1",
+    "subtitle": "Campus Accommodation & Environmental Biology Lecture",
+    "duration_minutes": 30,
+    "sections": [
+      {
+        "section_number": 1,
+        "title": "Part 1: Student Accommodation Inquiry",
+        "scenario": "A conversation between a university student and an accommodation officer discussing rental options near campus.",
+        "audio_script": "Officer: Good morning, International Student Services. How can I assist you today?\nStudent: Hello! My name is Arthur Pendelton. I have just arrived from Canada for the postgraduate engineering program, and I urgently need to secure accommodation.\nOfficer: Welcome to Manchester, Arthur! Let me take down a few details first. Could you spell your last name for me?\nStudent: Certainly, it is P-E-N-D-E-L-T-O-N.\nOfficer: Thank you. And your primary contact telephone number?\nStudent: It's 07455 982310.\nOfficer: Brilliant. Now, what type of accommodation are you looking for? We have self-catering studio flats, university halls of residence, or shared homestay with local families.\nStudent: I prefer a self-catering studio or shared flat. Quietness is my priority because I have intensive laboratory hours. My maximum monthly budget is around 650 pounds including utilities.\nOfficer: Let's see... We have a lovely ensuite bedroom available at Greenleaf Court on St. Jude Street. The rent is 620 pounds per month, which includes water and superfast broadband, but electricity is paid on a pre-paid meter.\nStudent: That sounds reasonable. How far is it from the central engineering campus?\nOfficer: It's roughly a 15-minute walk, or just 5 minutes if you cycle along the dedicated canal bike lane.\nStudent: Excellent! When is the earliest move-in date?\nOfficer: The room will be fully cleaned and ready on September 18th.",
+        "questions": [
+          {
+            "id": "lq1",
+            "type": "fill_in_blank",
+            "question": "Student's family name: ________",
+            "correct_answer": "Pendelton",
+            "explanation": "Người học đánh vần: P-E-N-D-E-L-T-O-N."
+          },
+          {
+            "id": "lq2",
+            "type": "fill_in_blank",
+            "question": "Student's telephone number: ________",
+            "correct_answer": "07455 982310",
+            "explanation": "Arthur trả lời: 'It's 07455 982310'."
+          },
+          {
+            "id": "lq3",
+            "type": "fill_in_blank",
+            "question": "Maximum monthly budget: £________",
+            "correct_answer": "650",
+            "explanation": "Arthur nêu ngân sách: 'My maximum monthly budget is around 650 pounds'."
+          },
+          {
+            "id": "lq4",
+            "type": "fill_in_blank",
+            "question": "Location of the recommended apartment: Greenleaf Court on ________ Street.",
+            "correct_answer": "St. Jude",
+            "explanation": "Cán bộ tư vấn nói: 'available at Greenleaf Court on St. Jude Street'."
+          },
+          {
+            "id": "lq5",
+            "type": "fill_in_blank",
+            "question": "Earliest available move-in date: September ________th.",
+            "correct_answer": "18",
+            "explanation": "Cán bộ tư vấn xác nhận: 'ready on September 18th'."
+          }
+        ]
+      },
+      {
+        "section_number": 4,
+        "title": "Part 4: Academic Lecture - Marine Bioluminescence",
+        "scenario": "A university lecture delivered by Dr. Laura Vance on the evolutionary biology and chemical mechanisms of glowing marine organisms.",
+        "audio_script": "Good afternoon, students. Today we continue our module on deep-sea ecology with a focus on bioluminescence—the biochemical emission of light by living organisms. In the sunlit epipelagic zone, sunlight provides illumination. However, beneath 200 meters, darkness prevails, and in the abyss, bioluminescence is the predominant source of light, utilized by over 75% of deep-sea species.\n\nChemically, bioluminescence involves two core molecules: luciferin and either luciferase or a photoprotein. Luciferin is the compound that produces light when oxidized, catalyzed by the enzyme luciferase. Unlike incandescent light bulbs, which lose over 90% of their energy as heat, bioluminescent reactions are nearly 100% efficient cold light, wasting negligible thermal energy.\n\nOrganisms deploy bioluminescence for three primary survival imperatives: defense, hunting, and reproduction. For defense, many mesopelagic squids practice counter-illumination. Photophores located along their undersides match the exact color and intensity of downwelling sunlight, rendering them invisible to predators hunting from below. For predation, the celebrated anglerfish utilizes a modified dorsal fin spine tipped with a bioluminescent esca, dangling it like a glowing fishing lure to attract unsuspecting fish directly into its cavernous jaws.",
+        "questions": [
+          {
+            "id": "lq6",
+            "type": "fill_in_blank",
+            "question": "More than ________% of deep-sea species utilize bioluminescence.",
+            "correct_answer": "75",
+            "explanation": "Giảng viên nói: 'utilized by over 75% of deep-sea species'."
+          },
+          {
+            "id": "lq7",
+            "type": "multiple_choice",
+            "question": "What is remarkable about the bioluminescent light reaction?",
+            "options": [
+              "It produces huge amounts of infrared heat",
+              "It is nearly 100% efficient cold light with minimal thermal waste",
+              "It requires continuous exposure to ultraviolet radiation",
+              "It only functions in fresh water"
+            ],
+            "correct_answer": "It is nearly 100% efficient cold light with minimal thermal waste",
+            "explanation": "Giảng viên nhấn mạnh: 'reactions are nearly 100% efficient cold light, wasting negligible thermal energy'."
+          },
+          {
+            "id": "lq8",
+            "type": "multiple_choice",
+            "question": "How do mesopelagic squids use counter-illumination for protection?",
+            "options": [
+              "By releasing toxic luminous ink clouds",
+              "By matching their underside glow to downward sunlight to become invisible from below",
+              "By blinding predators with sudden high-voltage flashes",
+              "By altering their body temperature"
+            ],
+            "correct_answer": "By matching their underside glow to downward sunlight to become invisible from below",
+            "explanation": "Giảng viên giải thích: 'Photophores located along their undersides match the exact color and intensity of downwelling sunlight, rendering them invisible to predators hunting from below'."
+          }
+        ]
+      }
+    ]
+  }
+]

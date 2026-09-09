@@ -1,0 +1,1572 @@
+{% extends 'base.html' %}
+
+{% block title %}Bộ Từ Vựng - IELTSMASTER Dictionary{% endblock %}
+
+{% block header %}
+<!-- Overriding default header with dedicated Vocabulary Hub Navigation -->
+{% endblock %}
+
+{% block footer %}
+<!-- Overriding default footer with full workspace layout -->
+{% endblock %}
+
+{% block content %}
+<div class="vocab-workspace" id="vocab-app">
+  <!-- Top Navigation Bar -->
+  <header class="vocab-top-bar">
+    <div style="display: flex; align-items: center;">
+      <a href="{{ url_for('index') }}" class="vocab-top-logo" title="Quay về Trang chủ IELTSMASTER">
+        <div class="vocab-logo-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <div class="vocab-logo-text">
+          <span class="vocab-logo-sub">THE IELTS</span>
+          <span class="vocab-logo-title">DICTIONARY</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="vocab-search-wrap">
+        <svg class="vocab-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="vocab-main-search" 
+          class="vocab-search-input" 
+          placeholder="Tìm từ vựng, bộ thẻ..." 
+          autocomplete="off"
+          oninput="handleQuickSearch(this.value)"
+          onkeydown="handleSearchKey(event)"
+        >
+        <span class="vocab-search-badge">⌘K</span>
+
+        <!-- Search Results Dropdown -->
+        <div id="search-dropdown" style="display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: #18191E; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; max-height: 320px; overflow-y: auto; padding: 0.5rem; z-index: 250; box-shadow: 0 16px 36px rgba(0,0,0,0.5);">
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="vocab-top-controls">
+      <!-- Streak Pill -->
+      <div class="vocab-streak-pill" title="Chuỗi ngày học liên tục">
+        <span>🔥</span>
+        <span id="header-streak-val">0</span>
+      </div>
+
+      <!-- Dark / Light Mode Toggle -->
+      <button class="vocab-ctrl-btn" onclick="toggleWorkspaceTheme()" title="Chuyển đổi giao diện Sáng / Tối">
+        <svg id="theme-moon-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- Notification Bell -->
+      <button class="vocab-ctrl-btn" onclick="showNotificationToast()" title="Thông báo học tập">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </button>
+
+      <!-- User Profile Pill -->
+      <a href="{{ url_for('history') }}" class="vocab-user-pill" title="Hồ sơ cá nhân & Thống kê">
+        <div class="vocab-user-avatar">
+          {% if current_user %}
+            {{ current_user.username[0]|upper }}
+          {% else %}
+            Đ
+          {% endif %}
+        </div>
+        <span>
+          {% if current_user %}
+            {{ current_user.username }}
+          {% else %}
+            Đức Hải Trần
+          {% endif %}
+        </span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Body Layout: Sidebar + Main Area -->
+  <div class="vocab-body-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="vocab-sidebar">
+      <div>
+        <!-- Section: HỌC TẬP -->
+        <div class="vocab-sidebar-section">
+          <div class="vocab-side-heading">HỌC TẬP</div>
+          
+          <a href="{{ url_for('index') }}" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Tổng quan</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="openNotesModal()" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Sổ ghi chú</span>
+          </a>
+
+          <!-- Active Golden Yellow Pill -->
+          <a href="javascript:void(0)" class="vocab-side-link active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span>Bộ từ</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="launchQuickFlashcard('all')" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>Flashcard</span>
+          </a>
+
+          <a href="{{ url_for('history') }}" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            <span>Thống kê</span>
+          </a>
+
+          <a href="{{ url_for('history') }}" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Lịch sử làm bài</span>
+          </a>
+        </div>
+
+        <!-- Section: CHIA SẺ WEBSITE / TÀI NGUYÊN -->
+        <div class="vocab-sidebar-section">
+          <div class="vocab-side-heading">CHIA SẺ WEBSITE</div>
+
+          <a href="javascript:void(0)" onclick="showGenericModal('Thống kê giới thiệu', 'Bạn đã giới thiệu được 0 học viên. Chia sẻ liên kết của bạn để nhận thêm điểm thưởng và học liệu miễn phí!')" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Thống kê giới thiệu</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="showGenericModal('Hoa hồng của bạn', 'Hiện tại bạn đang có 0đ hoa hồng tích lũy. Tích lũy đủ 100.000đ để rút về tài khoản ngân hàng hoặc đổi khóa học!')" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            <span>Hoa hồng của bạn</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="showGenericModal('Chính sách chia sẻ', 'Chương trình giới thiệu IELTSMASTER: Nhận 20% học phí khi bạn bè đăng ký tài khoản ôn luyện IELTS Academic & General!')" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Chính sách chia sẻ</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="showGenericModal('Ý tưởng chia sẻ', 'Gợi ý chia sẻ: Đăng tải kết quả chuỗi streak học từ vựng mỗi ngày lên Story Facebook/Tiktok kèm mã mời để nhận quà!')" class="vocab-side-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path>
+              <path d="M10 22h4"></path>
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+            </svg>
+            <span>Ý tưởng chia sẻ</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom Sidebar Actions -->
+      <div>
+        <a href="{{ url_for('logout') if current_user else url_for('login') }}" class="vocab-logout-link" title="{{ 'Đăng xuất khỏi tài khoản' if current_user else 'Đăng nhập vào IELTSMASTER' }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>{{ 'Đăng xuất' if current_user else 'Đăng nhập' }}</span>
+        </a>
+
+        <!-- Streak Tracker Box -->
+        <div class="vocab-streak-box">
+          <div class="vocab-streak-header">
+            <div class="vocab-streak-icon-wrap">🔥</div>
+            <div class="vocab-streak-info">
+              <div class="vocab-streak-days" id="sidebar-streak-val">0 ngày</div>
+              <div class="vocab-streak-sub">Chuỗi học liên tục</div>
+            </div>
+          </div>
+          <!-- 7 day indicators: Mon to Sun -->
+          <div class="vocab-streak-dashes">
+            <div class="vocab-dash active" title="Thứ 2"></div>
+            <div class="vocab-dash" title="Thứ 3"></div>
+            <div class="vocab-dash" title="Thứ 4"></div>
+            <div class="vocab-dash" title="Thứ 5"></div>
+            <div class="vocab-dash" title="Thứ 6"></div>
+            <div class="vocab-dash" title="Thứ 7"></div>
+            <div class="vocab-dash" title="Chủ nhật"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="vocab-main-content">
+      <!-- Ambient Cloud in Background -->
+      <div class="vocab-cloud-bg"></div>
+
+      <!-- Horizontal Category Pills Bar -->
+      <div class="vocab-category-bar">
+        <button class="vocab-pill" onclick="switchCategory('topics', this)">
+          <span>Chủ đề</span>
+          <span class="vocab-pill-count">· 11 bộ</span>
+        </button>
+
+        <button class="vocab-pill active" onclick="switchCategory('4k-books', this)">
+          <span>4k vocab books</span>
+          <span class="vocab-pill-count">· 6 bộ</span>
+        </button>
+
+        <button class="vocab-pill" onclick="switchCategory('idioms', this)">
+          <span>Thành ngữ</span>
+          <span class="vocab-pill-count">· 500</span>
+        </button>
+
+        <button class="vocab-pill" onclick="switchCategory('phrasal-verbs', this)">
+          <span>Phrasal Verbs</span>
+          <span class="vocab-pill-count">· 550</span>
+        </button>
+
+        <button class="vocab-pill" onclick="switchCategory('oxford-3000', this)">
+          <span>Oxford 3000</span>
+          <span class="vocab-pill-count">· 3000</span>
+        </button>
+
+        <button class="vocab-pill" onclick="switchCategory('cambridge', this)">
+          <span>Cambridge</span>
+          <span class="vocab-pill-count">· 10 bộ</span>
+        </button>
+
+        <button class="vocab-pill" onclick="switchCategory('tid-vocab', this)">
+          <span>TID Vocabulary</span>
+          <span class="vocab-pill-count">· 2 bộ</span>
+        </button>
+      </div>
+
+      <!-- Dynamic Section Heading -->
+      <div class="vocab-section-heading">
+        <div class="vocab-section-sub" id="section-sub-label">BỘ SÁCH · 4K VOCAB BOOKS</div>
+        <h1 class="vocab-section-title" id="section-title-text">6 bộ sách · 180 unit</h1>
+      </div>
+
+      <!-- Main Display Container: Dynamic Content -->
+      <div id="vocab-view-container">
+        <!-- 6 Book Cards Grid (2 rows x 3 cols) -->
+        <div class="vocab-books-grid" id="books-grid">
+          <!-- Book 1: Emerald Green -->
+          <div class="vocab-book-card book-theme-1" onclick="openBookUnits(1)" title="Click để xem 30 Unit của Book 1">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 1 · Nền tảng</h2>
+              <p class="book-desc">Từ vựng nền tảng, trình độ sơ cấp...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">600 từ</span>
+            </div>
+          </div>
+
+          <!-- Book 2: Warm Orange -->
+          <div class="vocab-book-card book-theme-2" onclick="openBookUnits(2)" title="Click để xem 30 Unit của Book 2">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 2 · Sơ-trung cấp</h2>
+              <p class="book-desc">Mở rộng vốn từ, chủ đề đời sống...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">600 từ</span>
+            </div>
+          </div>
+
+          <!-- Book 3: Coral Crimson Red -->
+          <div class="vocab-book-card book-theme-3" onclick="openBookUnits(3)" title="Click để xem 30 Unit của Book 3">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 3 · Trung cấp</h2>
+              <p class="book-desc">Từ vựng học thuật bắt đầu xuất hiện...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">600 từ</span>
+            </div>
+          </div>
+
+          <!-- Book 4: Royal Blue -->
+          <div class="vocab-book-card book-theme-4" onclick="openBookUnits(4)" title="Click để xem 30 Unit của Book 4">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 4 · Trung-cao cấp</h2>
+              <p class="book-desc">Từ vựng phức tạp hơn, sắc thái rõ...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">601 từ</span>
+            </div>
+          </div>
+
+          <!-- Book 5: Violet Purple -->
+          <div class="vocab-book-card book-theme-5" onclick="openBookUnits(5)" title="Click để xem 30 Unit của Book 5">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 5 · Cao cấp</h2>
+              <p class="book-desc">Từ học thuật, chuẩn bị Band cao...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">600 từ</span>
+            </div>
+          </div>
+
+          <!-- Book 6: Deep Teal -->
+          <div class="vocab-book-card book-theme-6" onclick="openBookUnits(6)" title="Click để xem 30 Unit của Book 6">
+            <div class="book-card-top">
+              <span class="book-tag">IELTS · 30 unit</span>
+              <div class="book-rosette-badge">
+                <div class="book-rosette-icon"></div>
+              </div>
+            </div>
+            <div class="book-card-mid">
+              <h2 class="book-title">Book 6 · Thành thạo</h2>
+              <p class="book-desc">Từ vựng nâng cao, độ chính xác cao...</p>
+            </div>
+            <div class="book-card-bottom">
+              <span class="book-words-count">600 từ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     MODALS & INTERACTIVE DRAWERS
+     ========================================================================== -->
+
+<!-- 1. Book Units Drawer Modal -->
+<div id="book-modal" class="vocab-modal-backdrop" style="display: none;">
+  <div class="vocab-modal-window">
+    <div class="vocab-modal-header">
+      <div>
+        <span id="modal-book-tag" class="book-tag" style="background: rgba(250, 204, 21, 0.2); color: #FACC15; border-color: rgba(250, 204, 21, 0.3);">
+          IELTS · 30 UNIT
+        </span>
+        <h2 id="modal-book-title" style="font-size: 1.6rem; font-weight: 800; margin: 0.5rem 0 0.25rem 0;">
+          Book 1 · Nền tảng
+        </h2>
+        <p id="modal-book-desc" style="color: #9CA3AF; font-size: 0.88rem; margin: 0;">
+          Từ vựng nền tảng, trình độ sơ cấp...
+        </p>
+      </div>
+      <button class="vocab-modal-close" onclick="closeBookUnits()" title="Đóng">✕</button>
+    </div>
+
+    <!-- Quick Action Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; background: #202228; padding: 0.85rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+      <div style="font-size: 0.85rem; color: #E5E7EB;">
+        Tổng số: <strong style="color: #FACC15;">30 Units</strong> • <strong style="color: #10B981;">600 từ vựng</strong>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="launchBookFlashcards()" style="background: #FACC15; color: #18181B; font-weight: 700; border: none; padding: 0.45rem 1rem;">
+        ⚡ Luyện tất cả Flashcards
+      </button>
+    </div>
+
+    <!-- 30 Units Grid -->
+    <div class="vocab-units-grid" id="modal-units-list">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- 2. Flashcard Study Player Modal -->
+<div id="flashcard-modal" class="vocab-modal-backdrop" style="display: none;">
+  <div class="vocab-modal-window" style="max-width: 680px;">
+    <div class="vocab-modal-header" style="margin-bottom: 1rem; padding-bottom: 0.85rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="badge" id="fc-category-badge" style="background: rgba(250, 204, 21, 0.2); color: #FACC15;">
+          IELTS Flashcard
+        </span>
+        <span id="fc-counter" style="font-size: 0.88rem; color: #9CA3AF; font-family: var(--font-mono);">
+          1 / 20 từ
+        </span>
+      </div>
+      <button class="vocab-modal-close" onclick="closeFlashcardModal()" title="Đóng Flashcard">✕</button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 1.5rem;">
+      <div id="fc-progress-fill" style="width: 5%; height: 100%; background: #FACC15; transition: width 0.25s ease;"></div>
+    </div>
+
+    <!-- The Flashcard Stage -->
+    <div class="vocab-flashcard-box">
+      <!-- Word + POS + Soundwave Audio Button -->
+      <div class="vocab-flashcard-word-row">
+        <div>
+          <h2 id="fc-word" class="vocab-flashcard-word">unprecedented</h2>
+          <div class="vocab-flashcard-ipa-row">
+            <span id="fc-ipa" class="vocab-flashcard-ipa">/ʌnˈpres.ɪ.den.tɪd/</span>
+            <span id="fc-pos" class="badge" style="background: rgba(255,255,255,0.1); color: #E5E7EB;">adjective</span>
+          </div>
+        </div>
+
+        <!-- Audio Pronounce Button with Soundwave -->
+        <button id="fc-audio-btn" class="soundwave-btn" onclick="playCurrentFCAudio()" title="Nghe phát âm chuẩn Cambridge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <div class="soundwave-bars">
+            <span class="sw-bar"></span>
+            <span class="sw-bar"></span>
+            <span class="sw-bar"></span>
+            <span class="sw-bar"></span>
+          </div>
+        </button>
+      </div>
+
+      <!-- English Definition from Free Dictionary API -->
+      <div id="fc-def-en-wrap" style="margin-bottom: 0.85rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #9CA3AF; display: block; margin-bottom: 0.25rem;">
+          Định nghĩa tiếng Anh (Free Dictionary API)
+        </span>
+        <div id="fc-def-en" style="font-size: 0.95rem; color: #E5E7EB; line-height: 1.5; font-style: italic;">
+          To be entitled to, as a result of past actions; to be worthy to have.
+        </div>
+      </div>
+
+      <!-- Definition in Vietnamese from Gemini AI -->
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #FACC15; display: block; margin-bottom: 0.25rem;">
+          Định nghĩa tiếng Việt (Gemini AI)
+        </span>
+        <div id="fc-meaning" class="vocab-flashcard-meaning">
+          Chưa từng có tiền lệ, chưa từng xảy ra trước đây
+        </div>
+      </div>
+
+      <!-- IELTS Academic Explanation from Gemini AI -->
+      <div id="fc-explanation-wrap" style="margin-bottom: 1rem; background: rgba(250, 204, 21, 0.08); border-radius: 8px; padding: 0.75rem 1rem; border: 1px solid rgba(250, 204, 21, 0.15);">
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #FACC15; display: block; margin-bottom: 0.25rem;">
+          💡 Hướng dẫn vận dụng IELTS (Lexical Resource)
+        </span>
+        <div id="fc-explanation" style="font-size: 0.88rem; color: #F3F4F6; line-height: 1.5;">
+          Từ vựng học thuật quan trọng để nâng cao band điểm Writing Task 2 và Speaking.
+        </div>
+      </div>
+
+      <!-- IELTS Academic Example -->
+      <div style="margin-bottom: 1rem;">
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #9CA3AF; display: block; margin-bottom: 0.35rem;">
+          Ví dụ ngữ cảnh IELTS Academic Band 7.5+
+        </span>
+        <div id="fc-example" class="vocab-flashcard-example">
+          "The country is currently experiencing an unprecedented economic boom driven by renewable technology."
+        </div>
+      </div>
+
+      <!-- IELTS Collocations -->
+      <div id="fc-collocations-wrap" style="margin-bottom: 1.5rem;">
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #9CA3AF; display: block; margin-bottom: 0.4rem;">
+          Collocations học thuật khuyên dùng
+        </span>
+        <div id="fc-collocations" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+          <!-- Collocation badges -->
+        </div>
+      </div>
+
+      <!-- Actions: Know vs Review -->
+      <div class="vocab-flashcard-actions">
+        <button id="fc-know-btn" class="vocab-action-know" onclick="markFCKnowThis()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span id="fc-know-text">✓ Đã thuộc (I know this)</span>
+        </button>
+
+        <button class="vocab-action-review" onclick="markFCReviewLater()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+          </svg>
+          <span>Ôn lại sau (Review later)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation between cards -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button class="btn btn-secondary btn-sm" onclick="prevFCCard()" style="background: #202228; border-color: rgba(255,255,255,0.1); color: #E5E7EB;">
+        ← Từ trước
+      </button>
+      <span style="font-size: 0.78rem; color: #6B7280;">Dùng phím ← và → để chuyển từ, Space để nghe</span>
+      <button class="btn btn-secondary btn-sm" onclick="nextFCCard()" style="background: #202228; border-color: rgba(255,255,255,0.1); color: #E5E7EB;">
+        Từ tiếp theo →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Notes Modal (Sổ ghi chú) -->
+<div id="notes-modal" class="vocab-modal-backdrop" style="display: none;">
+  <div class="vocab-modal-window" style="max-width: 650px;">
+    <div class="vocab-modal-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(250,204,21,0.2); color: #FACC15; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          📝
+        </div>
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0;">Sổ Ghi Chú Từ Vựng Cá Nhân</h2>
+          <span style="font-size: 0.8rem; color: #9CA3AF;">Ghi chép các collocations, từ mới cần nhớ trong lúc luyện thi</span>
+        </div>
+      </div>
+      <button class="vocab-modal-close" onclick="closeNotesModal()">✕</button>
+    </div>
+
+    <textarea 
+      id="vocab-personal-notes" 
+      rows="10" 
+      style="width: 100%; background: #202228; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; color: #F3F4F6; font-size: 0.92rem; font-family: var(--font-sans); line-height: 1.6; resize: vertical; outline: none; margin-bottom: 1.25rem;"
+      placeholder="Viết ghi chú của bạn ở đây... Ví dụ:&#10;- Unprecedented boom: bùng nổ chưa từng có&#10;- Mitigate adverse impacts: giảm thiểu tác động tiêu cực&#10;- Pervasive technology: công nghệ phổ biến khắp nơi"
+    ></textarea>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span id="notes-saved-status" style="font-size: 0.8rem; color: #10B981;">✓ Đã tự động lưu vào trình duyệt</span>
+      <button class="btn btn-primary btn-sm" onclick="savePersonalNotes()" style="background: #FACC15; color: #18181B; font-weight: 700; border: none;">
+        Lưu ghi chú
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Generic Message Modal (Referral, Commission, Policy) -->
+<div id="generic-modal" class="vocab-modal-backdrop" style="display: none;">
+  <div class="vocab-modal-window" style="max-width: 500px; text-align: center;">
+    <div style="font-size: 2.5rem; margin-bottom: 1rem;">✨</div>
+    <h3 id="generic-modal-title" style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.75rem;">Tiêu đề</h3>
+    <p id="generic-modal-body" style="color: #9CA3AF; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem;">Nội dung</p>
+    <button class="btn btn-primary" onclick="closeGenericModal()" style="background: #FACC15; color: #18181B; font-weight: 700; border: none; width: 100%;">
+      Đã hiểu
+    </button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Backend database items from Flask
+  const rawVocabList = {{ vocab_list|tojson }};
+  const rawTopics = {{ topics|tojson }};
+
+  // 6 Books Metadata according to screenshot
+  const BOOKS_DATA = [
+    {
+      id: 1,
+      title: "Book 1 · Nền tảng",
+      sub: "IELTS · 30 unit",
+      desc: "Từ vựng nền tảng, trình độ sơ cấp...",
+      wordsCount: 600,
+      themeClass: "book-theme-1",
+      band: "Band 4.0 - 5.5",
+      unitPrefix: "Foundation"
+    },
+    {
+      id: 2,
+      title: "Book 2 · Sơ-trung cấp",
+      sub: "IELTS · 30 unit",
+      desc: "Mở rộng vốn từ, chủ đề đời sống...",
+      wordsCount: 600,
+      themeClass: "book-theme-2",
+      band: "Band 5.0 - 6.0",
+      unitPrefix: "Daily Life"
+    },
+    {
+      id: 3,
+      title: "Book 3 · Trung cấp",
+      sub: "IELTS · 30 unit",
+      desc: "Từ vựng học thuật bắt đầu xuất hiện...",
+      wordsCount: 600,
+      themeClass: "book-theme-3",
+      band: "Band 6.0 - 6.5",
+      unitPrefix: "Academic Transition"
+    },
+    {
+      id: 4,
+      title: "Book 4 · Trung-cao cấp",
+      sub: "IELTS · 30 unit",
+      desc: "Từ vựng phức tạp hơn, sắc thái rõ...",
+      wordsCount: 601,
+      themeClass: "book-theme-4",
+      band: "Band 6.5 - 7.5",
+      unitPrefix: "Advanced Nuances"
+    },
+    {
+      id: 5,
+      title: "Book 5 · Cao cấp",
+      sub: "IELTS · 30 unit",
+      desc: "Từ học thuật, chuẩn bị Band cao...",
+      wordsCount: 600,
+      themeClass: "book-theme-5",
+      band: "Band 7.5 - 8.5",
+      unitPrefix: "High Band Collocations"
+    },
+    {
+      id: 6,
+      title: "Book 6 · Thành thạo",
+      sub: "IELTS · 30 unit",
+      desc: "Từ vựng nâng cao, độ chính xác cao...",
+      wordsCount: 600,
+      themeClass: "book-theme-6",
+      band: "Band 8.5 - 9.0",
+      unitPrefix: "Mastery & C2 Fluency"
+    }
+  ];
+
+  // 11 Standardized Topics list matching data/vocabulary.json
+  const TOPICS_DATA = [
+    { 
+      title: "Environment & Climate Change", 
+      titleVi: "Môi trường & Biến đổi khí hậu", 
+      icon: "🌱", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Hiện tượng nóng lên toàn cầu, suy thoái sinh thái, năng lượng tái tạo & giải pháp giảm thiểu tác hại khí hậu."
+    },
+    { 
+      title: "Technology, AI & The Digital Era", 
+      titleVi: "Công nghệ, AI & Kỷ nguyên số", 
+      icon: "💻", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Trí tuệ nhân tạo, tính toán thuật toán, tự động hóa, chuyển đổi số & tính phổ biến của công nghệ hiện đại."
+    },
+    { 
+      title: "Education, Schools & Pedagogics", 
+      titleVi: "Giáo dục, Trường học & Sư phạm", 
+      icon: "🎓", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Phương pháp sư phạm tiên tiến, chuẩn hóa chương trình giảng dạy, phát triển tư duy phản biện & học tập suốt đời."
+    },
+    { 
+      title: "Health, Medicine & Well-being", 
+      titleVi: "Sức khỏe, Y tế & Lối sống", 
+      icon: "🏥", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Y học dự phòng, bệnh mãn tính, nâng cao thể chất, trị liệu tâm lý & phòng chống dịch bệnh trên diện rộng."
+    },
+    { 
+      title: "Business, Economy & Employment", 
+      titleVi: "Kinh doanh, Kinh tế & Việc làm", 
+      icon: "📈", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Khởi nghiệp, tinh thần doanh nhân, thị trường tài chính, lạm phát, thương mại quốc tế & thị trường lao động."
+    },
+    { 
+      title: "Society, Culture & Family Values", 
+      titleVi: "Xã hội, Văn hóa & Giá trị gia đình", 
+      icon: "🏛️", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Bình đẳng cơ hội, sự gắn kết cộng đồng, bảo tồn di sản văn hóa phi vật thể & chuyển dịch cấu trúc gia đình."
+    },
+    { 
+      title: "Government, Law, Crime & Ethics", 
+      titleVi: "Chính phủ, Luật pháp & Tội phạm", 
+      icon: "⚖️", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Khung pháp lý, minh bạch tư pháp, tính răn đe tội phạm, chính sách công & cải tạo phạm nhân."
+    },
+    { 
+      title: "Art, Media, Entertainment & Sports", 
+      titleVi: "Nghệ thuật, Truyền thông & Thể thao", 
+      icon: "🎨", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Giá trị thẩm mỹ, lan truyền truyền thông số, tài trợ nghệ thuật công cộng & tinh thần thể thao chuyên nghiệp."
+    },
+    { 
+      title: "Urbanization, Infrastructure & Housing", 
+      titleVi: "Đô thị hóa, Cơ sở hạ tầng & Nhà ở", 
+      icon: "🏙️", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Đô thị hóa nhanh, cơ sở hạ tầng giao thông, nhà ở xã hội & giải pháp quy hoạch thành phố bền vững."
+    },
+    { 
+      title: "Global Issues, Globalization & Tourism", 
+      titleVi: "Vấn đề toàn cầu & Du lịch", 
+      icon: "🌍", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Toàn cầu hóa kinh tế, du lịch bền vững, hợp tác đa phương & giải quyết khủng hoảng nhân đạo quốc tế."
+    },
+    { 
+      title: "Psychology & Human Behavior", 
+      titleVi: "Tâm lý học & Hành vi con người", 
+      icon: "🧠", 
+      count: "7 từ học thuật", 
+      band: "Band 7.5 - 8.5",
+      desc: "Nhận thức con người, tâm lý xã hội, khả năng phục hồi tinh thần, động lực nội tại & định hình nhân cách."
+    }
+  ];
+
+  // Active flashcard queue
+  let currentStudyQueue = [...rawVocabList];
+  let currentStudyIndex = 0;
+  let activeBookSelected = null;
+
+  // Streak simulation or sync
+  let currentStreak = parseInt(localStorage.getItem('ielts_vocab_streak') || '0', 10);
+
+  function updateStreakDisplay() {
+    document.getElementById('header-streak-val').textContent = currentStreak;
+    document.getElementById('sidebar-streak-val').textContent = `${currentStreak} ngày`;
+  }
+
+  // Category Switcher
+  function switchCategory(category, buttonEl) {
+    // Update active state in pills bar
+    document.querySelectorAll('.vocab-pill').forEach(btn => btn.classList.remove('active'));
+    if (buttonEl) {
+      buttonEl.classList.add('active');
+    } else {
+      // Find pill matching category
+      const targetPill = Array.from(document.querySelectorAll('.vocab-pill')).find(p => {
+        const onclickAttr = p.getAttribute('onclick') || '';
+        return onclickAttr.includes(`'${category}'`);
+      });
+      if (targetPill) targetPill.classList.add('active');
+    }
+
+    const subLabel = document.getElementById('section-sub-label');
+    const titleText = document.getElementById('section-title-text');
+    const container = document.getElementById('vocab-view-container');
+
+    if (category === '4k-books') {
+      subLabel.textContent = 'BỘ SÁCH · 4K VOCAB BOOKS';
+      titleText.textContent = '6 bộ sách · 180 unit';
+      renderBooksGrid();
+    } else if (category === 'topics') {
+      subLabel.textContent = 'CHỦ ĐỀ HỌC THUẬT IELTS';
+      titleText.textContent = '11 bộ từ vựng theo chủ đề trọng tâm';
+      renderTopicsGrid();
+    } else if (category === 'idioms') {
+      subLabel.textContent = 'THÀNH NGỮ BẢN XỨ (IDIOMS)';
+      titleText.textContent = '500 thành ngữ đạt Band 7.5+ trong IELTS Speaking & Writing';
+      renderCustomCollection('Thành ngữ IELTS', 'Bộ sưu tập 500 thành ngữ học thuật & tự nhiên như người bản xứ.', 'idioms');
+    } else if (category === 'phrasal-verbs') {
+      subLabel.textContent = 'CỤM ĐỘNG TỪ (PHRASAL VERBS)';
+      titleText.textContent = '550 Phrasal Verbs hay nhất trong bài thi IELTS';
+      renderCustomCollection('Phrasal Verbs', 'Tăng điểm Lexical Resource tự nhiên với 550 cụm động từ chọn lọc.', 'phrasal');
+    } else if (category === 'oxford-3000') {
+      subLabel.textContent = 'OXFORD 3000 CORE';
+      titleText.textContent = '3000 từ vựng cốt lõi tiếng Anh chuẩn Oxford';
+      renderCustomCollection('Oxford 3000', 'Nền tảng từ vựng quan trọng nhất để đọc hiểu bài thi IELTS nhanh chóng.', 'oxford');
+    } else if (category === 'cambridge') {
+      subLabel.textContent = 'TỪ VỰNG CAMBRIDGE IELTS 10 - 19';
+      titleText.textContent = '10 bộ từ vựng trích xuất từ đề thi thật Cambridge';
+      renderCustomCollection('Cambridge IELTS', 'Tổng hợp từ vựng xuất hiện nhiều nhất trong các bộ đề thi Cambridge gần đây.', 'cambridge');
+    } else {
+      subLabel.textContent = 'TID VOCABULARY';
+      titleText.textContent = '2 bộ từ vựng độc quyền IELTSMASTER Core';
+      renderCustomCollection('IELTSMASTER Core', 'Bộ từ độc quyền gồm Academic Collocations và Topic-specific Words.', 'core');
+    }
+  }
+
+  // Render 6 Books
+  function renderBooksGrid() {
+    const container = document.getElementById('vocab-view-container');
+    let html = `<div class="vocab-books-grid">`;
+    BOOKS_DATA.forEach(book => {
+      html += `
+        <div class="vocab-book-card ${book.themeClass}" onclick="openBookUnits(${book.id})" title="Click để xem 30 Unit của ${book.title}">
+          <div class="book-card-top">
+            <span class="book-tag">${book.sub}</span>
+            <div class="book-rosette-badge">
+              <div class="book-rosette-icon"></div>
+            </div>
+          </div>
+          <div class="book-card-mid">
+            <h2 class="book-title">${book.title}</h2>
+            <p class="book-desc">${book.desc}</p>
+          </div>
+          <div class="book-card-bottom">
+            <span class="book-words-count">${book.wordsCount} từ</span>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  // Render Topics Grid (11 Topics)
+  function renderTopicsGrid() {
+    const container = document.getElementById('vocab-view-container');
+    let html = `
+      <div class="vocab-topics-header-banner">
+        <div class="topics-banner-info">
+          <div class="topics-banner-badge">11 CHUYÊN ĐỀ CAMBRIDGE IELTS ACADEMIC</div>
+          <h2 class="topics-banner-title">Từ vựng phân chia theo chủ đề trọng điểm</h2>
+          <p class="topics-banner-desc">Tuyển tập 77 từ vựng Band 7.5+ cốt lõi được phân bổ đều qua 11 chủ đề xuất hiện nhiều nhất trong IELTS Writing Task 2, Speaking Part 2 & 3 và Reading. Khám phá toàn bộ danh sách, ví dụ học thuật và luyện flashcard chuyên sâu.</p>
+        </div>
+        <div class="topics-banner-stats">
+          <div class="stat-pill"><span class="stat-num">77</span> từ học thuật chọn lọc</div>
+          <div class="stat-pill"><span class="stat-num">11</span> chuyên đề chuẩn</div>
+          <div class="stat-pill"><span class="stat-num">Band 7.5+</span> mục tiêu</div>
+        </div>
+      </div>
+      <div class="vocab-topics-grid">
+    `;
+
+    TOPICS_DATA.forEach((top) => {
+      const topicWords = rawVocabList.filter(w => (w.topic || '').toLowerCase() === top.title.toLowerCase());
+      const wordsCount = topicWords.length || 7;
+      const masteredCount = topicWords.filter(w => w.is_mastered).length;
+
+      html += `
+        <div class="vocab-topic-card" onclick="viewTopicWords('${top.title}')">
+          <div class="topic-card-header">
+            <div class="topic-icon-wrap">${top.icon}</div>
+            <span class="topic-band-tag">${top.band}</span>
+          </div>
+          <div class="topic-card-body">
+            <h3 class="topic-card-title">${top.title}</h3>
+            <div class="topic-card-title-vi">${top.titleVi}</div>
+            <p class="topic-card-desc">${top.desc}</p>
+          </div>
+          <div class="topic-card-footer">
+            <span class="topic-words-badge">${wordsCount} từ • ${masteredCount} đã thuộc</span>
+            <div class="topic-card-actions" onclick="event.stopPropagation()">
+              <button class="topic-explore-btn" onclick="viewTopicWords('${top.title}')" title="Xem danh sách từ và ví dụ">
+                📖 Xem 7 từ
+              </button>
+              <button class="topic-fc-btn" onclick="launchTopicFlashcards('${top.title}')" title="Luyện Flashcard nhanh">
+                ⚡ Flashcard
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  // View detail words within a specific topic
+  function viewTopicWords(topicTitle) {
+    const top = TOPICS_DATA.find(t => t.title.toLowerCase() === topicTitle.toLowerCase()) || {
+      title: topicTitle,
+      titleVi: topicTitle,
+      icon: "📚",
+      band: "Band 7.5 - 8.5",
+      desc: "Chuyên đề từ vựng học thuật IELTS."
+    };
+
+    const words = rawVocabList.filter(w => (w.topic || '').toLowerCase() === topicTitle.toLowerCase());
+
+    const subLabel = document.getElementById('section-sub-label');
+    const titleText = document.getElementById('section-title-text');
+    subLabel.textContent = `CHỦ ĐỀ · ${top.title.toUpperCase()}`;
+    titleText.textContent = `${top.icon} ${top.titleVi} (${top.title})`;
+
+    const container = document.getElementById('vocab-view-container');
+    const escapedTitle = topicTitle.replace(/'/g, "\\'");
+
+    let html = `
+      <div class="vocab-topic-detail-header">
+        <div class="topic-detail-left">
+          <button class="topic-back-btn" onclick="switchCategory('topics')">
+            ← Quay lại 11 Chủ đề
+          </button>
+          <div class="topic-detail-meta">
+            <h2>${top.icon} ${top.titleVi}</h2>
+            <p>${top.title} • <strong>${words.length} từ vựng học thuật</strong> chọn lọc</p>
+          </div>
+        </div>
+        <div class="topic-detail-right">
+          <div class="topic-search-input-wrap">
+            <span class="topic-search-icon">🔍</span>
+            <input 
+              type="text" 
+              class="topic-search-input" 
+              placeholder="Tìm từ trong chủ đề này..." 
+              oninput="filterTopicWords(this.value)"
+            />
+          </div>
+          <button class="btn btn-primary" onclick="launchTopicFlashcards('${escapedTitle}')" style="background: #FACC15; color: #18181B; font-weight: 700; border: none; padding: 0.55rem 1.25rem; border-radius: 10px; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+            ⚡ Luyện Flashcard (${words.length} từ)
+          </button>
+        </div>
+      </div>
+
+      <div class="vocab-topic-words-grid" id="topic-words-grid">
+    `;
+
+    if (words.length === 0) {
+      html += `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #18191E; border-radius: 16px; color: #9CA3AF;">
+          Chưa có từ vựng nào trong chủ đề này.
+        </div>
+      `;
+    } else {
+      words.forEach(w => {
+        html += renderSingleWordCardHtml(w);
+      });
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  // Render HTML for an individual word card inside topic view
+  function renderSingleWordCardHtml(w) {
+    const colls = w.collocations || w.synonyms || [];
+    const escapedWord = (w.word || '').replace(/'/g, "\\'");
+    return `
+      <div class="vocab-topic-word-card" id="word-card-${w.id}" data-word="${(w.word || '').toLowerCase()}" data-meaning="${(w.meaning_vi || '').toLowerCase()}">
+        <div>
+          <div class="topic-word-top">
+            <div class="topic-word-main">
+              <span class="topic-word-text">${w.word}</span>
+              <span class="topic-word-ipa">${w.ipa || w.phonetic || ''}</span>
+              <span class="topic-word-pos">${w.pos || 'word'}</span>
+              <span class="topic-word-band">Band ${w.band || '7.5+'}</span>
+            </div>
+            <button class="soundwave-btn" onclick="playWordSound('${escapedWord}', '${w.audio || ''}', this)" title="Nghe phát âm chuẩn Cambridge">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              <div class="soundwave-bars">
+                <span class="sw-bar"></span>
+                <span class="sw-bar"></span>
+                <span class="sw-bar"></span>
+                <span class="sw-bar"></span>
+              </div>
+            </button>
+          </div>
+
+          <div class="topic-word-meaning">
+            <span class="meaning-label">Định nghĩa tiếng Việt</span>
+            <div class="meaning-text">${w.meaning_vi}</div>
+          </div>
+
+          <div class="topic-word-example">
+            <span style="font-size: 0.68rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.2rem;">Ví dụ ngữ cảnh IELTS Academic Band 7.5+</span>
+            <div class="example-quote">"${w.example || w.ielts_example || ''}"</div>
+          </div>
+
+          ${colls.length > 0 ? `
+            <div class="topic-word-colls">
+              <span class="colls-label">Collocations học thuật khuyên dùng:</span>
+              <div class="colls-pills">
+                ${colls.map(c => `<span class="coll-pill">${c}</span>`).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="topic-word-bottom">
+          <button class="btn-mastery ${w.is_mastered ? 'mastered' : ''}" onclick="toggleWordMastery('${w.id}', this)">
+            ${w.is_mastered ? '✓ Đã thuộc' : '○ Đánh dấu đã thuộc'}
+          </button>
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="btn-fc-word" onclick="launchSingleWordFlashcard('${escapedWord}')" title="Học từ này qua Flashcard">
+              ⚡ Flashcard
+            </button>
+            <button class="btn-lookup-word" onclick="searchWordOnline('${escapedWord}')" title="Tra cứu chuyên sâu với Free Dict + Gemini">
+              🔍 Tra chi tiết
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Filter words inside topic view
+  function filterTopicWords(query) {
+    const q = (query || '').trim().toLowerCase();
+    const cards = document.querySelectorAll('#topic-words-grid .vocab-topic-word-card');
+    cards.forEach(card => {
+      const word = card.getAttribute('data-word') || '';
+      const meaning = card.getAttribute('data-meaning') || '';
+      if (!q || word.includes(q) || meaning.includes(q)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Launch flashcard starting from a specific word
+  function launchSingleWordFlashcard(wordName) {
+    const item = rawVocabList.find(w => (w.word || '').toLowerCase() === wordName.toLowerCase());
+    if (!item) return;
+    const topicWords = rawVocabList.filter(w => (w.topic || '').toLowerCase() === (item.topic || '').toLowerCase() && (w.word || '').toLowerCase() !== wordName.toLowerCase());
+    currentStudyQueue = [item, ...topicWords];
+    currentStudyIndex = 0;
+    document.getElementById('fc-category-badge').textContent = item.topic || 'IELTS ACADEMIC';
+    openFlashcardModal();
+  }
+
+  // Toggle mastery for a word
+  async function toggleWordMastery(wordId, btnEl) {
+    try {
+      const res = await fetch('/api/vocabulary/toggle-mastery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word_id: wordId })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const item = rawVocabList.find(w => w.id === wordId);
+        if (item) item.is_mastered = data.is_mastered;
+        
+        if (data.is_mastered) {
+          btnEl.classList.add('mastered');
+          btnEl.textContent = '✓ Đã thuộc';
+          currentStreak++;
+          localStorage.setItem('ielts_vocab_streak', currentStreak);
+          updateStreakDisplay();
+          if (typeof showToast === 'function') {
+            showToast(`Đã ghi nhận thuộc từ "${item ? item.word : ''}"!`, 'success');
+          }
+        } else {
+          btnEl.classList.remove('mastered');
+          btnEl.textContent = '○ Đánh dấu đã thuộc';
+          if (typeof showToast === 'function') {
+            showToast(`Đã chuyển sang trạng thái cần ôn lại`, 'info');
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // Unified audio pronunciation player
+  function playWordSound(word, audioUrl, btnEl) {
+    if (!word) return;
+    if (btnEl) btnEl.classList.add('playing');
+
+    if (audioUrl) {
+      try {
+        const audio = new Audio(audioUrl);
+        audio.play().then(() => {
+          setTimeout(() => { if (btnEl) btnEl.classList.remove('playing'); }, 1500);
+        }).catch(() => {
+          speakFallback(word, btnEl);
+        });
+      } catch (err) {
+        speakFallback(word, btnEl);
+      }
+    } else {
+      speakFallback(word, btnEl);
+    }
+  }
+
+  function speakFallback(word, btnEl) {
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-GB';
+        utterance.rate = 0.88;
+        utterance.onend = () => {
+          if (btnEl) btnEl.classList.remove('playing');
+        };
+        utterance.onerror = () => {
+          if (btnEl) btnEl.classList.remove('playing');
+        };
+        window.speechSynthesis.speak(utterance);
+      } else {
+        if (btnEl) btnEl.classList.remove('playing');
+      }
+    } catch (e) {
+      if (btnEl) btnEl.classList.remove('playing');
+    }
+  }
+
+  // Render other custom collections
+  function renderCustomCollection(name, desc, type) {
+    const container = document.getElementById('vocab-view-container');
+    container.innerHTML = `
+      <div style="background: #18191E; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 2.5rem; text-align: center; max-width: 700px; margin: 0 auto;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+        <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; color: #FFFFFF;">${name}</h2>
+        <p style="color: #9CA3AF; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem;">${desc}</p>
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn btn-primary" onclick="launchQuickFlashcard('${type}')" style="background: #FACC15; color: #18181B; font-weight: 700; border: none; padding: 0.65rem 1.75rem;">
+            ⚡ Bắt đầu luyện Flashcard ngay
+          </button>
+          <button class="btn btn-secondary" onclick="switchCategory('4k-books')" style="background: #202228; border-color: rgba(255,255,255,0.1); color: #E5E7EB;">
+            Quay lại 6 Bộ Sách
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Open Book Units Drawer Modal
+  function openBookUnits(bookId) {
+    const book = BOOKS_DATA.find(b => b.id === bookId);
+    if (!book) return;
+    activeBookSelected = book;
+
+    document.getElementById('modal-book-tag').textContent = `IELTS · 30 UNIT • ${book.band}`;
+    document.getElementById('modal-book-title').textContent = book.title;
+    document.getElementById('modal-book-desc').textContent = `${book.desc} Tổng cộng 30 Unit với 20 từ vựng học thuật chuẩn hoá mỗi Unit.`;
+
+    const list = document.getElementById('modal-units-list');
+    let unitsHtml = '';
+    for (let i = 1; i <= 30; i++) {
+      unitsHtml += `
+        <div class="vocab-unit-item" onclick="launchUnitFlashcards(${book.id}, ${i})">
+          <div>
+            <span class="vocab-unit-num">Unit ${i}</span>
+            <div class="vocab-unit-title">${book.unitPrefix} Part ${i}</div>
+          </div>
+          <div class="vocab-unit-footer">
+            <span>20 từ vựng</span>
+            <span style="color: #FACC15; font-weight: 600;">Học ngay →</span>
+          </div>
+        </div>
+      `;
+    }
+    list.innerHTML = unitsHtml;
+    document.getElementById('book-modal').style.display = 'flex';
+  }
+
+  function closeBookUnits() {
+    document.getElementById('book-modal').style.display = 'none';
+  }
+
+  // Launch Flashcard Study for a Book
+  function launchBookFlashcards() {
+    closeBookUnits();
+    launchQuickFlashcard('book-' + (activeBookSelected ? activeBookSelected.id : 1));
+  }
+
+  // Launch Flashcard Study for a specific Unit
+  function launchUnitFlashcards(bookId, unitNum) {
+    closeBookUnits();
+    // Filter or prepare words
+    currentStudyQueue = [...rawVocabList];
+    currentStudyIndex = 0;
+    document.getElementById('fc-category-badge').textContent = `Book ${bookId} • Unit ${unitNum}`;
+    openFlashcardModal();
+  }
+
+  function launchTopicFlashcards(topicName) {
+    const tClean = (topicName || '').trim().toLowerCase();
+    const filtered = rawVocabList.filter(w => {
+      const wTopic = (w.topic || '').trim().toLowerCase();
+      return wTopic === tClean || wTopic.includes(tClean) || tClean.includes(wTopic);
+    });
+    currentStudyQueue = filtered.length > 0 ? filtered : [...rawVocabList];
+    currentStudyIndex = 0;
+    document.getElementById('fc-category-badge').textContent = topicName;
+    openFlashcardModal();
+  }
+
+  function launchQuickFlashcard(type) {
+    currentStudyQueue = [...rawVocabList];
+    currentStudyIndex = 0;
+    document.getElementById('fc-category-badge').textContent = type.toUpperCase();
+    openFlashcardModal();
+  }
+
+  function openFlashcardModal() {
+    renderFCCard();
+    document.getElementById('flashcard-modal').style.display = 'flex';
+  }
+
+  function closeFlashcardModal() {
+    document.getElementById('flashcard-modal').style.display = 'none';
+  }
+
+  // Render active Flashcard Card
+  function renderFCCard() {
+    if (!currentStudyQueue || currentStudyQueue.length === 0) return;
+    const item = currentStudyQueue[currentStudyIndex];
+
+    document.getElementById('fc-word').textContent = item.word;
+    document.getElementById('fc-ipa').textContent = item.phonetic || item.ipa || `/${item.word}/`;
+    document.getElementById('fc-pos').textContent = item.pos || 'word';
+    document.getElementById('fc-meaning').textContent = item.meaning_vi || 'Đang cập nhật';
+    document.getElementById('fc-example').textContent = `"${item.ielts_example || item.example || ''}"`;
+
+    // English definition from Dictionary API
+    const defEnEl = document.getElementById('fc-def-en');
+    if (defEnEl) {
+      defEnEl.textContent = item.definition_en || item.example_en || 'Academic IELTS terminology';
+    }
+
+    // Explanation from Gemini AI
+    const expEl = document.getElementById('fc-explanation');
+    if (expEl) {
+      expEl.textContent = item.ielts_explanation || `Từ vựng học thuật quan trọng trong tiêu chí Lexical Resource của bài thi IELTS.`;
+    }
+
+    // Collocations
+    const collWrap = document.getElementById('fc-collocations');
+    if (collWrap) {
+      const colls = item.collocations || item.synonyms || [];
+      if (colls.length > 0) {
+        collWrap.innerHTML = colls.map(c => `<span class="badge badge-azure" style="font-size: 0.78rem; padding: 0.2rem 0.6rem;">${c}</span>`).join('');
+        document.getElementById('fc-collocations-wrap').style.display = 'block';
+      } else {
+        document.getElementById('fc-collocations-wrap').style.display = 'none';
+      }
+    }
+
+    // Progress counter & bar
+    const total = currentStudyQueue.length;
+    document.getElementById('fc-counter').textContent = `${currentStudyIndex + 1} / ${total} từ`;
+    const percent = ((currentStudyIndex + 1) / total) * 100;
+    document.getElementById('fc-progress-fill').style.width = `${percent}%`;
+
+    // Know button state
+    const knowBtn = document.getElementById('fc-know-btn');
+    const knowText = document.getElementById('fc-know-text');
+    if (item.is_mastered) {
+      knowText.textContent = '✓ Đã thuộc (Mastered)';
+      knowBtn.style.background = '#059669';
+    } else {
+      knowText.textContent = '✓ Đã thuộc (I know this)';
+      knowBtn.style.background = '#10B981';
+    }
+  }
+
+  // Play Audio (Uses Free Dictionary MP3 audio when available, speech synthesis fallback)
+  function playCurrentFCAudio() {
+    const item = currentStudyQueue[currentStudyIndex];
+    if (!item) return;
+    const btn = document.getElementById('fc-audio-btn');
+    playWordSound(item.word, item.audio, btn);
+  }
+
+  function nextFCCard() {
+    if (currentStudyIndex < currentStudyQueue.length - 1) {
+      currentStudyIndex++;
+    } else {
+      currentStudyIndex = 0;
+    }
+    renderFCCard();
+  }
+
+  function prevFCCard() {
+    if (currentStudyIndex > 0) {
+      currentStudyIndex--;
+    } else {
+      currentStudyIndex = currentStudyQueue.length - 1;
+    }
+    renderFCCard();
+  }
+
+  // Toggle Mastery API Call
+  async function markFCKnowThis() {
+    const item = currentStudyQueue[currentStudyIndex];
+    if (!item) return;
+
+    try {
+      const res = await fetch('/api/vocabulary/toggle-mastery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word_id: item.id })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        item.is_mastered = data.is_mastered;
+        renderFCCard();
+
+        // Increase streak if newly mastered
+        if (item.is_mastered) {
+          currentStreak++;
+          localStorage.setItem('ielts_vocab_streak', currentStreak);
+          updateStreakDisplay();
+        }
+
+        if (typeof showToast === 'function') {
+          showToast(item.is_mastered ? `Đã lưu "${item.word}" vào danh sách từ thuộc!` : `Đã chuyển "${item.word}" vào hàng đợi ôn lại.`, 'success');
+        }
+        setTimeout(() => nextFCCard(), 450);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function markFCReviewLater() {
+    if (typeof showToast === 'function') {
+      showToast('Từ đã được giữ lại trong danh sách ôn tập!', 'info');
+    }
+    nextFCCard();
+  }
+
+  // Notes Modal (Sổ ghi chú)
+  function openNotesModal() {
+    const saved = localStorage.getItem('ielts_personal_notes') || '';
+    document.getElementById('vocab-personal-notes').value = saved;
+    document.getElementById('notes-saved-status').textContent = saved ? '✓ Đã nạp ghi chú gần nhất' : 'Sẵn sàng ghi chú';
+    document.getElementById('notes-modal').style.display = 'flex';
+  }
+
+  function closeNotesModal() {
+    document.getElementById('notes-modal').style.display = 'none';
+  }
+
+  function savePersonalNotes() {
+    const text = document.getElementById('vocab-personal-notes').value;
+    localStorage.setItem('ielts_personal_notes', text);
+    document.getElementById('notes-saved-status').textContent = '✓ Đã lưu thành công vào trình duyệt!';
+    if (typeof showToast === 'function') {
+      showToast('Đã lưu sổ ghi chú cá nhân!', 'success');
+    }
+    setTimeout(closeNotesModal, 600);
+  }
+
+  // Generic Modal
+  function showGenericModal(title, body) {
+    document.getElementById('generic-modal-title').textContent = title;
+    document.getElementById('generic-modal-body').textContent = body;
+    document.getElementById('generic-modal').style.display = 'flex';
+  }
+
+  function closeGenericModal() {
+    document.getElementById('generic-modal').style.display = 'none';
+  }
+
+  function showNotificationToast() {
+    if (typeof showToast === 'function') {
+      showToast('Chào mừng bạn đến với Bộ Từ Vựng 4K IELTS Books! Chúc bạn học tốt!', 'info');
+    }
+  }
+
+  // Theme Toggle (Dark / Light)
+  function toggleWorkspaceTheme() {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    localStorage.setItem('ielts_vocab_theme', isLight ? 'light' : 'dark');
+    if (typeof showToast === 'function') {
+      showToast(isLight ? 'Đã chuyển sang giao diện Sáng' : 'Đã chuyển sang giao diện Tối', 'info');
+    }
+  }
+
+  // Quick Search Bar (⌘K)
+  function handleQuickSearch(val) {
+    const dropdown = document.getElementById('search-dropdown');
+    const query = val.trim().toLowerCase();
+    if (!query) {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    const matches = rawVocabList.filter(w => 
+      w.word.toLowerCase().includes(query) || 
+      w.meaning_vi.toLowerCase().includes(query) ||
+      w.topic.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = `
+        <div style="padding: 0.75rem; color: #9CA3AF; font-size: 0.85rem; text-align: center;">
+          Chưa có trong danh mục có sẵn.
+        </div>
+        <div style="padding: 0.65rem 0.85rem; border-radius: 8px; background: rgba(250, 204, 21, 0.15); color: #FACC15; font-size: 0.85rem; cursor: pointer; text-align: center; font-weight: 700;" onclick="searchWordOnline('${query}')">
+          ⚡ Tra cứu trực tuyến "${query}" (Free Dictionary + Gemini AI) →
+        </div>
+      `;
+    } else {
+      let resultsHtml = matches.slice(0, 5).map(m => `
+        <div style="padding: 0.6rem 0.75rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;" onmouseover="this.style.background='#272A33'" onmouseout="this.style.background='transparent'" onclick="searchWordOnline('${m.word}')">
+          <div>
+            <span style="font-weight: 700; color: #FFFFFF; font-size: 0.92rem;">${m.word}</span>
+            <span style="font-family: var(--font-mono); font-size: 0.78rem; color: #9CA3AF; margin-left: 0.4rem;">${m.ipa || m.phonetic || ''}</span>
+            <div style="font-size: 0.78rem; color: #D1D5DB; margin-top: 2px;">${m.meaning_vi}</div>
+          </div>
+          <span class="badge badge-amber" style="font-size: 0.72rem;">${m.band || 'Band 7.5+'}</span>
+        </div>
+      `).join('');
+
+      resultsHtml += `
+        <div style="padding: 0.5rem 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 4px; color: #FACC15; font-size: 0.8rem; cursor: pointer; text-align: center; font-weight: 600;" onclick="searchWordOnline('${query}')">
+          Tra cứu toàn diện từ "${query}" với Dictionary API & Gemini AI →
+        </div>
+      `;
+      dropdown.innerHTML = resultsHtml;
+    }
+    dropdown.style.display = 'block';
+  }
+
+  function handleSearchKey(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('search-dropdown').style.display = 'none';
+    } else if (e.key === 'Enter') {
+      const input = document.getElementById('vocab-main-search');
+      if (input && input.value.trim()) {
+        searchWordOnline(input.value.trim());
+      }
+    }
+  }
+
+  // Direct Online Lookup via GET /api/vocabulary/<word>
+  async function searchWordOnline(word) {
+    const clean = (word || '').trim().toLowerCase();
+    if (!clean) return;
+
+    document.getElementById('search-dropdown').style.display = 'none';
+    if (typeof showToast === 'function') {
+      showToast(`Đang tra cứu "${clean}" qua Free Dictionary & Gemini AI...`, 'info');
+    }
+
+    try {
+      const res = await fetch('/api/vocabulary/' + encodeURIComponent(clean));
+      const jsonRes = await res.json();
+      if (res.ok && jsonRes.data) {
+        const item = jsonRes.data;
+        // Insert into current queue
+        const existsIdx = currentStudyQueue.findIndex(w => (w.word || '').toLowerCase() === clean);
+        if (existsIdx !== -1) {
+          currentStudyQueue.splice(existsIdx, 1);
+        }
+        currentStudyQueue.unshift(item);
+        currentStudyIndex = 0;
+        document.getElementById('fc-category-badge').textContent = item.cached ? 'Tra cứu (Từ Cache)' : 'Tra cứu (Free Dictionary + Gemini)';
+        openFlashcardModal();
+        playCurrentFCAudio();
+        if (typeof showToast === 'function') {
+          showToast(`Đã tải thành công từ "${clean}"!`, 'success');
+        }
+      } else {
+        if (typeof showToast === 'function') {
+          showToast(jsonRes.error || `Không tìm thấy từ "${clean}"`, 'warning');
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      if (typeof showToast === 'function') {
+        showToast('Lỗi khi tra cứu từ vựng trực tuyến', 'error');
+      }
+    }
+  }
+
+  function selectSearchedWord(wordId) {
+    searchWordOnline(wordId);
+  }
+
+  // Global Keyboard Shortcuts
+  document.addEventListener('keydown', (e) => {
+    // ⌘K or Ctrl+K for search
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const input = document.getElementById('vocab-main-search');
+      input.focus();
+      input.select();
+      return;
+    }
+
+    // Flashcard navigation
+    const fcModal = document.getElementById('flashcard-modal');
+    if (fcModal && fcModal.style.display === 'flex') {
+      if (e.code === 'ArrowRight') nextFCCard();
+      if (e.code === 'ArrowLeft') prevFCCard();
+      if (e.code === 'Space') {
+        e.preventDefault();
+        playCurrentFCAudio();
+      }
+      if (e.key === 'Escape') closeFlashcardModal();
+    }
+
+    // Book modal escape
+    const bookModal = document.getElementById('book-modal');
+    if (bookModal && bookModal.style.display === 'flex' && e.key === 'Escape') {
+      closeBookUnits();
+    }
+  });
+
+  // Close dropdown on outside click
+  document.addEventListener('click', (e) => {
+    const wrap = document.querySelector('.vocab-search-wrap');
+    const dropdown = document.getElementById('search-dropdown');
+    if (wrap && !wrap.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    updateStreakDisplay();
+    // Load theme preference
+    const savedTheme = localStorage.getItem('ielts_vocab_theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-theme');
+    }
+  });
+</script>
+{% endblock %}

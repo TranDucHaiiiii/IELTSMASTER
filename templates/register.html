@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Create an account - IELTSMASTER{% endblock %}
+
+{% block content %}
+<div class="container" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem;">
+  <div style="max-width: 420px; width: 100%;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 1.4rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+        Create your IELTSMASTER account
+      </h1>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">
+        Track your 4-skills progress and practice tests
+      </p>
+    </div>
+
+    <!-- Error Alert -->
+    {% if error %}
+    <div style="background: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: var(--danger); font-size: 0.85rem; margin-bottom: 1.25rem;">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST" action="{{ url_for('register') }}">
+      <div style="margin-bottom: 1.15rem;">
+        <label for="username" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem;">
+          Username
+        </label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          value="{{ form.username if form else '' }}"
+          placeholder="e.g. alex_ielts" 
+          required 
+          class="input"
+        >
+      </div>
+
+      <div style="margin-bottom: 1.15rem;">
+        <label for="email" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem;">
+          Email address
+        </label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          value="{{ form.email if form else '' }}"
+          placeholder="name@example.com" 
+          required 
+          class="input"
+        >
+      </div>
+
+      <div style="margin-bottom: 1.15rem;">
+        <label for="target_band" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem;">
+          Target Band Score
+        </label>
+        <select id="target_band" name="target_band" class="select">
+          <option value="6.0">Band 6.0 — Competent</option>
+          <option value="6.5">Band 6.5 — Study Abroad Standard</option>
+          <option value="7.0">Band 7.0 — Good User</option>
+          <option value="7.5" selected>Band 7.5 — Competitive Target</option>
+          <option value="8.0">Band 8.0 — Very Good User</option>
+          <option value="8.5">Band 8.5+ — Expert User</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div>
+          <label for="password" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem;">
+            Password
+          </label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="••••••••" 
+            required 
+            class="input"
+          >
+        </div>
+
+        <div>
+          <label for="confirm_password" style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem;">
+            Confirm
+          </label>
+          <input 
+            type="password" 
+            id="confirm_password" 
+            name="confirm_password" 
+            placeholder="••••••••" 
+            required 
+            class="input"
+          >
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 1.25rem;">
+        Create account
+      </button>
+
+      <div style="text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
+        Already have an account? 
+        <a href="{{ url_for('login') }}" style="font-weight: 500;">Log in</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

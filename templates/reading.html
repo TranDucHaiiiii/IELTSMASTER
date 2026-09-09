@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}Reading Practice - IELTS Academic - IELTSMASTER{% endblock %}
+
+{% block content %}
+<div class="test-layout">
+  {% set total_questions = 10 %}
+
+  <!-- Test Top Bar: Clean, Minimal, Functional -->
+  <div class="test-header-bar">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="{{ url_for('index') }}" style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem;">
+        ← Dashboard
+      </a>
+      <div class="test-title-meta">
+        {{ test.title }}
+      </div>
+    </div>
+
+    <!-- Question navigation in header: 1 2 3 4 5 6 7 8 9 10 -->
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <div class="q-nav-list">
+        {% set p_counter = namespace(value=0) %}
+        {% for p in test.passages %}
+          {% for q in p.questions %}
+            {% set p_counter.value = p_counter.value + 1 %}
+            <div class="q-nav-item nav-pill {% if p_counter.value == 1 %}active{% endif %}" data-qid="{{ q.id }}" title="Question {{ p_counter.value }}">
+              {{ p_counter.value }}
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+
+      <div class="test-timer-badge">
+        <span id="test-timer">60:00</span>
+      </div>
+
+      <button id="submit-test-btn" class="btn btn-primary btn-sm">
+        Submit test
+      </button>
+    </div>
+  </div>
+
+  <!-- Test Body: Split Screen (Passage on Left, Questions on Right) -->
+  <div class="split-container">
+    <!-- Left: Reading Passage -->
+    <div class="reading-pane">
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+        {% for p in test.passages %}
+        <button class="btn btn-sm {% if loop.first %}btn-primary{% else %}btn-secondary{% endif %} passage-tab-btn" 
+                onclick="switchPassage({{ loop.index0 }})">
+          Passage {{ p.passage_number }}
+        </button>
+        {% endfor %}
+      </div>
+
+      {% for p in test.passages %}
+      <div class="passage-content-block" id="passage-block-{{ loop.index0 }}" {% if not loop.first %}style="display: none;"{% endif %}>
+        <h2 style="font-size: 1.35rem; margin-bottom: 1rem; color: var(--text-primary);">{{ p.title }}</h2>
+        <div class="reading-text">
+          {% for para in p.content.split('\n\n') %}
+          <p>{{ para }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Right: Question Content -->
+    <div class="question-pane">
+      <div style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.5rem;">
+        Questions 1–10
+      </div>
+
+      <form id="reading-test-form">
+        {% set q_counter = namespace(value=0) %}
+        {% for p in test.passages %}
+          {% for q in p.questions %}
+            {% set q_counter.value = q_counter.value + 1 %}
+            <div class="question-block" id="card-{{ q.id }}">
+              <div class="question-title">
+                <span>{{ q_counter.value }}.</span> {{ q.question }}
+              </div>
+
+              {% if q.type == 'true_false_not_given' or q.type == 'multiple_choice' %}
+              <div style="display: flex; flex-direction: column; gap: 0.4rem; padding-left: 1.25rem;">
+                {% for opt in q.options %}
+                <label class="option-row">
+                  <input type="radio" name="answer_{{ q.id }}" value="{{ opt }}" data-qid="{{ q.id }}" class="question-input">
+                  <span>{{ opt }}</span>
+                </label>
+                {% endfor %}
+              </div>
+              {% elif q.type == 'fill_in_blank' %}
+              <div style="padding-left: 1.25rem; margin-top: 0.5rem;">
+                <input type="text" placeholder="Type your answer here..." data-qid="{{ q.id }}" class="input question-input" style="max-width: 320px;">
+              </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </form>
+    </div>
+  </div>
+
+  <!-- Test Bottom Bar: Previous | Question Count | Next -->
+  <div class="test-bottom-bar">
+    <button class="btn btn-secondary btn-sm" onclick="navigateQuestion(-1)">
+      ← Previous
+    </button>
+
+    <span id="current-q-indicator" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+      Question 1 of 10
+    </span>
+
+    <button class="btn btn-secondary btn-sm" onclick="navigateQuestion(1)">
+      Next →
+    </button>
+  </div>
+</div>
+
+<!-- Evaluation Results Modal (Clean Minimalist Dialog) -->
+<div id="result-modal" class="modal-overlay">
+  <div class="modal-card">
+    <div id="modal-results-body">
+      <!-- Injected by JavaScript -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/test_engine.js') }}"></script>
+<script>
+  let currentQIndex = 1;
+  const totalQCount = 10;
+
+  function switchPassage(index) {
+    document.querySelectorAll('.passage-content-block').forEach((block, idx) => {
+      block.style.display = (idx === index) ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.passage-tab-btn').forEach((btn, idx) => {
+      if (idx === index) {
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-primary');
+      } else {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-secondary');
+      }
+    });
+  }
+
+  function navigateQuestion(direction) {
+    const nextIndex = currentQIndex + direction;
+    if (nextIndex >= 1 && nextIndex <= totalQCount) {
+      currentQIndex = nextIndex;
+      document.getElementById('current-q-indicator').textContent = `Question ${currentQIndex} of ${totalQCount}`;
+      
+      const pills = document.querySelectorAll('.q-nav-item');
+      pills.forEach((p, idx) => {
+        if (idx === currentQIndex - 1) {
+          p.classList.add('active');
+          const qid = p.getAttribute('data-qid');
+          const target = document.getElementById(`card-${qid}`);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          p.classList.remove('active');
+        }
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.testEngine = new IELTSTestEngine({
+      testId: '{{ test.id }}',
+      testType: 'reading',
+      durationMinutes: 60,
+      totalQuestions: 10
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}Band Score Calculator - IELTSMASTER{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 3.5rem; max-width: 900px;">
+  <!-- Header -->
+  <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-hairline); padding-bottom: 0.75rem;">
+    <h1 style="font-size: 1.35rem; margin-bottom: 0.25rem;">Official IELTS Band Calculator</h1>
+    <p style="font-size: 0.88rem; color: var(--text-muted);">
+      Convert raw scores to IELTS 9-band scale and calculate overall rounded score according to British Council / IDP rules.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start;">
+    <!-- Inputs -->
+    <div class="panel">
+      <div class="panel-header">
+        <span style="font-size: 0.95rem; font-weight: 600;">Skill Scores</span>
+      </div>
+      <div class="panel-body">
+        <!-- 1. Listening -->
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.88rem;">
+            <label style="font-weight: 500;">Listening raw score:</label>
+            <strong id="listening-band-badge">Band 7.5 (33/40)</strong>
+          </div>
+          <input type="range" id="listening-raw" min="0" max="40" value="33" style="width: 100%; accent-color: var(--brand-primary);" oninput="recalc()">
+        </div>
+
+        <!-- 2. Reading -->
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.88rem;">
+            <label style="font-weight: 500;">Reading raw score:</label>
+            <strong id="reading-band-badge">Band 7.0 (31/40)</strong>
+          </div>
+          <input type="range" id="reading-raw" min="0" max="40" value="31" style="width: 100%; accent-color: var(--brand-primary);" oninput="recalc()">
+          <div style="display: flex; gap: 1rem; font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem;">
+            <label style="cursor: pointer;"><input type="radio" name="reading-type" value="academic" checked onchange="recalc()"> Academic</label>
+            <label style="cursor: pointer;"><input type="radio" name="reading-type" value="general" onchange="recalc()"> General Training</label>
+          </div>
+        </div>
+
+        <!-- 3. Writing -->
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.88rem;">
+            <label style="font-weight: 500;">Writing band:</label>
+            <strong id="writing-band-val">Band 6.5</strong>
+          </div>
+          <input type="range" id="writing-band" min="4.0" max="9.0" step="0.5" value="6.5" style="width: 100%; accent-color: var(--brand-primary);" oninput="recalc()">
+        </div>
+
+        <!-- 4. Speaking -->
+        <div style="margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.88rem;">
+            <label style="font-weight: 500;">Speaking band:</label>
+            <strong id="speaking-band-val">Band 7.0</strong>
+          </div>
+          <input type="range" id="speaking-band" min="4.0" max="9.0" step="0.5" value="7.0" style="width: 100%; accent-color: var(--brand-primary);" oninput="recalc()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Calculated Result -->
+    <div>
+      <div class="panel" style="text-align: center; margin-bottom: 1.25rem;">
+        <div class="panel-header" style="justify-content: center;">
+          <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);">
+            Estimated Overall Band
+          </span>
+        </div>
+        <div class="panel-body">
+          <div id="overall-display" style="font-size: 4rem; font-weight: 700; color: var(--text-primary); line-height: 1;">
+            7.0
+          </div>
+          <div id="cefr-badge" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; font-weight: 500;">
+            C1 • Effective Operational Proficiency
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1.5rem; border-top: 1px solid var(--border-hairline); padding-top: 1.25rem; font-size: 0.82rem;">
+            <div>
+              <div style="color: var(--text-muted);">L</div>
+              <strong id="res-l">7.5</strong>
+            </div>
+            <div>
+              <div style="color: var(--text-muted);">R</div>
+              <strong id="res-r">7.0</strong>
+            </div>
+            <div>
+              <div style="color: var(--text-muted);">W</div>
+              <strong id="res-w">6.5</strong>
+            </div>
+            <div>
+              <div style="color: var(--text-muted);">S</div>
+              <strong id="res-s">7.0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rounding Rule Note -->
+      <div style="padding: 1rem; background: var(--bg-subtle); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">
+        <strong style="color: var(--text-primary);">Official Rounding Policy:</strong>
+        <p style="margin-top: 0.25rem;">Average fraction below .25 rounds down to .0; fraction from .25 to .74 rounds to .5; fraction .75 and above rounds up to the next whole band.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function getListeningBand(raw) {
+    if (raw >= 39) return 9.0;
+    if (raw >= 37) return 8.5;
+    if (raw >= 35) return 8.0;
+    if (raw >= 32) return 7.5;
+    if (raw >= 30) return 7.0;
+    if (raw >= 26) return 6.5;
+    if (raw >= 23) return 6.0;
+    if (raw >= 18) return 5.5;
+    if (raw >= 16) return 5.0;
+    if (raw >= 13) return 4.5;
+    if (raw >= 10) return 4.0;
+    if (raw >= 8)  return 3.5;
+    if (raw >= 6)  return 3.0;
+    return 2.5;
+  }
+
+  function getReadingAcademicBand(raw) {
+    if (raw >= 39) return 9.0;
+    if (raw >= 37) return 8.5;
+    if (raw >= 35) return 8.0;
+    if (raw >= 33) return 7.5;
+    if (raw >= 30) return 7.0;
+    if (raw >= 27) return 6.5;
+    if (raw >= 23) return 6.0;
+    if (raw >= 19) return 5.5;
+    if (raw >= 15) return 5.0;
+    if (raw >= 13) return 4.5;
+    if (raw >= 10) return 4.0;
+    if (raw >= 8)  return 3.5;
+    if (raw >= 6)  return 3.0;
+    return 2.5;
+  }
+
+  function getReadingGeneralBand(raw) {
+    if (raw >= 39) return 9.0;
+    if (raw >= 37) return 8.5;
+    if (raw >= 36) return 8.0;
+    if (raw >= 34) return 7.5;
+    if (raw >= 32) return 7.0;
+    if (raw >= 30) return 6.5;
+    if (raw >= 27) return 6.0;
+    if (raw >= 23) return 5.5;
+    if (raw >= 19) return 5.0;
+    if (raw >= 15) return 4.5;
+    return 4.0;
+  }
+
+  function calculateOverall(l, r, w, s) {
+    const avg = (l + r + w + s) / 4.0;
+    const integerPart = Math.floor(avg);
+    const fraction = avg - integerPart;
+
+    if (fraction < 0.25) {
+      return integerPart.toFixed(1);
+    } else if (fraction < 0.75) {
+      return (integerPart + 0.5).toFixed(1);
+    } else {
+      return (integerPart + 1).toFixed(1);
+    }
+  }
+
+  function recalc() {
+    const lRaw = parseInt(document.getElementById('listening-raw').value);
+    const rRaw = parseInt(document.getElementById('reading-raw').value);
+    const isAcademic = document.querySelector('input[name="reading-type"]:checked').value === 'academic';
+    const wBand = parseFloat(document.getElementById('writing-band').value);
+    const sBand = parseFloat(document.getElementById('speaking-band').value);
+
+    const lBand = getListeningBand(lRaw);
+    const rBand = isAcademic ? getReadingAcademicBand(rRaw) : getReadingGeneralBand(rRaw);
+
+    document.getElementById('listening-band-badge').textContent = `Band ${lBand.toFixed(1)} (${lRaw}/40)`;
+    document.getElementById('reading-band-badge').textContent = `Band ${rBand.toFixed(1)} (${rRaw}/40)`;
+    document.getElementById('writing-band-val').textContent = `Band ${wBand.toFixed(1)}`;
+    document.getElementById('speaking-band-val').textContent = `Band ${sBand.toFixed(1)}`;
+
+    document.getElementById('res-l').textContent = lBand.toFixed(1);
+    document.getElementById('res-r').textContent = rBand.toFixed(1);
+    document.getElementById('res-w').textContent = wBand.toFixed(1);
+    document.getElementById('res-s').textContent = sBand.toFixed(1);
+
+    const overall = calculateOverall(lBand, rBand, wBand, sBand);
+    document.getElementById('overall-display').textContent = overall;
+
+    const overallNum = parseFloat(overall);
+    const cefrEl = document.getElementById('cefr-badge');
+    if (overallNum >= 8.5) {
+      cefrEl.textContent = 'C2 • Mastery / Native-like';
+    } else if (overallNum >= 7.0) {
+      cefrEl.textContent = 'C1 • Effective Operational Proficiency';
+    } else if (overallNum >= 5.5) {
+      cefrEl.textContent = 'B2 • Vantage / Independent User';
+    } else {
+      cefrEl.textContent = 'B1 • Threshold';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', recalc);
+</script>
+{% endblock %}

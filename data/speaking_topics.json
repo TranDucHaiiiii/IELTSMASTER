@@ -1,0 +1,96 @@
+[
+  {
+    "id": "speak-01",
+    "topic_title": "Environmental Protection & Sustainable Living",
+    "difficulty": "Band 7.0 - 8.5",
+    "part1": [
+      {
+        "question": "Do you do anything to protect the environment in your daily routine?",
+        "sample_answer": "Absolutely. I make a conscious effort to minimize my ecological footprint by carrying reusable canvas totes instead of single-use polythene bags. Additionally, I diligently sort household recyclables and switch off unnecessary electrical appliances to conserve power.",
+        "collocations": ["conscious effort", "ecological footprint", "single-use plastics", "conserve power"]
+      },
+      {
+        "question": "Have you ever participated in any community clean-up campaigns?",
+        "sample_answer": "Yes, during my university years, I joined a weekend initiative dedicated to clearing litter along the local riverbanks. It was grueling work, yet extraordinarily rewarding to witness a once-polluted public space restored to pristine condition.",
+        "collocations": ["weekend initiative", "clearing litter", "rewarding experience", "pristine condition"]
+      }
+    ],
+    "part2": {
+      "cue_card_title": "Describe an environmental problem that has become serious in your hometown or country",
+      "prompts": [
+        "What the problem is and where it occurs",
+        "What causes this problem",
+        "How it affects people's daily lives",
+        "And explain what measures should be implemented to address it."
+      ],
+      "prep_time_seconds": 60,
+      "speech_time_seconds": 120,
+      "sample_speech": "I would like to talk about the alarming escalation of air pollution and airborne particulate matter in my metropolitan area over the past decade.\n\nThis environmental hazard primarily stems from two distinct catalysts: unprecedented vehicular congestion and unregulated industrial emissions from factory clusters on the city outskirts. With rapid urbanization, private automobile ownership has skyrocketed, filling the thoroughfares with diesel exhaust fumes during peak rush hours.\n\nThe ramifications on public health and daily life are profound. Thick layers of toxic smog frequently blanket the skyline, triggering respiratory ailments such as asthma, bronchitis, and chronic allergies, especially among toddlers and senior citizens. On hazardous air-quality days, outdoor physical activities and schools are routinely curtailed.\n\nTo mitigate this crisis, stringent interventions are imperative. Primarily, municipal authorities must heavily subsidize green public transport networks, such as electric metro lines and dedicated bus corridors, while imposing congestion charges on private vehicles entering central districts. Furthermore, transition toward solar and wind energy must be accelerated with strict penalties for industrial polluters.",
+      "band8_collocations": [
+        "alarming escalation",
+        "airborne particulate matter",
+        "unprecedented vehicular congestion",
+        "toxic smog",
+        "respiratory ailments",
+        "stringent interventions",
+        "subsidize green public transport"
+      ]
+    },
+    "part3": [
+      {
+        "question": "Should individual citizens or national governments take greater responsibility for solving global climate change?",
+        "sample_answer": "In my estimation, while individual conscientiousness is undeniably commendable, national governments and multinational corporations bear the lion's share of responsibility. Structural decarbonization requires multi-billion dollar capital investments in renewable energy infrastructure, carbon taxation policies, and international treaties like the Paris Agreement—measures that lie far beyond the reach of individual consumer choices.",
+        "key_phrases": ["bear the lion's share of responsibility", "structural decarbonization", "capital investments", "international treaties"]
+      },
+      {
+        "question": "Do you think schools teach young children enough about environmental protection nowadays?",
+        "sample_answer": "While contemporary curricula certainly cover basic tenets such as waste sorting and deforestation, the pedagogical approach remains somewhat overly theoretical. I believe schools ought to immerse pupils in experiential learning, such as organic gardening, campus composting, and visits to solar plants, fostering deep empathy for biodiversity from an early age.",
+        "key_phrases": ["basic tenets", "pedagogical approach", "experiential learning", "fostering deep empathy"]
+      }
+    ]
+  },
+  {
+    "id": "speak-02",
+    "topic_title": "Technology, Artificial Intelligence & Digital Habits",
+    "difficulty": "Band 7.0 - 8.5",
+    "part1": [
+      {
+        "question": "How often do you use your smartphone for study or work purposes?",
+        "sample_answer": "Practically incessantly throughout the day. My smartphone serves as an indispensable digital workstation, whether I am synchronizing my academic calendar, reviewing digital flashcards during my commute, or reading academic research papers.",
+        "collocations": ["incessantly throughout the day", "indispensable digital workstation", "synchronizing academic calendar"]
+      },
+      {
+        "question": "Do you prefer reading printed physical books or digital e-books?",
+        "sample_answer": "While I appreciate the tactile sensation and distinct aroma of traditional printed paper, I tend to gravitate toward e-books due to their sheer portability and instant searchability, which greatly accelerates my literature reviews.",
+        "collocations": ["tactile sensation", "gravitate toward", "sheer portability", "accelerate literature reviews"]
+      }
+    ],
+    "part2": {
+      "cue_card_title": "Describe an artificial intelligence tool or digital app that you find extremely useful",
+      "prompts": [
+        "What the tool is and how you discovered it",
+        "How frequently you use it",
+        "What specific functions you use it for",
+        "And explain why you consider it so valuable to your personal growth."
+      ],
+      "prep_time_seconds": 60,
+      "speech_time_seconds": 120,
+      "sample_speech": "I would like to share my experience with an AI-powered conversational writing assistant that has revolutionized how I compose academic reports and refine my English fluency.\n\nI stumbled upon this application roughly a year ago via a recommendation from an academic mentor. At first, I was skeptical, assuming it was merely an glorified spellchecker. However, once I integrated it into my daily writing regimen, it completely transformed my workflow.\n\nWhat sets this tool apart is its contextual nuance and adaptive syntactical feedback. Instead of simply highlighting typographical errors, it identifies passive sentence structures, suggests sophisticated academic collocations, and even rephrases convoluted arguments to enhance overall coherence.\n\nThe reason I regard it as utterly indispensable is that it operates as a tireless, 24/7 personal tutor. It doesn't just passively rectify my mistakes; it elucidates the underlying grammatical rationale, which continuously expands my lexical sophistication and elevates my confidence.",
+      "band8_collocations": [
+        "stumbled upon",
+        "glorified spellchecker",
+        "contextual nuance",
+        "adaptive syntactical feedback",
+        "convoluted arguments",
+        "lexical sophistication"
+      ]
+    },
+    "part3": [
+      {
+        "question": "What ethical hazards might emerge if society becomes overly dependent on generative AI?",
+        "sample_answer": "A paramount concern is the gradual erosion of critical thinking and creative originality. When algorithms can effortlessly synthesize essays or code, human intellect risks intellectual atrophy. Moreover, deepfakes and algorithmic bias pose profound threats to democratic integrity and social cohesion.",
+        "key_phrases": ["paramount concern", "intellectual atrophy", "creative originality", "algorithmic bias", "democratic integrity"]
+      }
+    ]
+  }
+]

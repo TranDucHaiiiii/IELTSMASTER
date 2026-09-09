@@ -1,0 +1,490 @@
+{% extends 'base.html' %}
+
+{% block title %}IELTSMASTER - Master IELTS. Build your confidence.{% endblock %}
+
+{% block content %}
+
+<!-- 1. HERO SECTION -->
+<section class="hero-editorial">
+  <div class="container">
+    <div class="hero-editorial-grid">
+      <div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.85rem;">
+          <span class="badge badge-intellect">✨ Ánh sáng tri thức • Đồng hành cùng sĩ tử IELTS</span>
+          <span class="badge badge-primary">Cambridge 2026</span>
+        </div>
+        <h1 class="hero-headline"><span class="text-gradient-intellect">Master IELTS.</span><br>Build your confidence.</h1>
+        <p class="hero-subheading">
+          Nền tảng luyện thi IELTS thông minh, tối giản và chuyên sâu. Rèn luyện tư duy học thuật qua bài tập thực chiến, từ vựng Band 7.5+ và phản hồi chính xác theo tiêu chí chấm thi.
+        </p>
+        <div class="hero-cta-group">
+          <a href="{{ url_for('reading') }}" class="btn btn-primary btn-lg">Start Practice</a>
+          <a href="{{ url_for('vocabulary') }}" class="btn btn-secondary btn-lg">Explore Vocabulary</a>
+        </div>
+
+        <div style="display: flex; gap: 2rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border-hairline);">
+          <div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">4 Skills</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Academic &amp; General</div>
+          </div>
+          <div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Band 7.5+</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Target Curriculum</div>
+          </div>
+          <div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">100% Free</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Open Study Access</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Board Preview -->
+      <div class="hero-visual-board">
+        <div class="visual-metric-header">
+          <div>
+            <span class="badge badge-primary">Academic Reading • Test 01</span>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-top: 0.4rem;">
+              The Rise of Smart Cities
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--status-amber);">
+              ⏱ 19:42 remaining
+            </span>
+          </div>
+        </div>
+
+        <div class="visual-reading-snippet">
+          <div class="snippet-title">Passage Extract (Paragraph B)</div>
+          <p class="snippet-text">
+            "...Sensors embedded in asphalt monitor vehicular density, dynamically calibrating traffic signals to reduce transit congestion by up to 23 percent..."
+          </p>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+            Question 1: Multiple Choice
+          </div>
+          <p style="font-size: 0.9rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.75rem;">
+            What is the primary operational objective of roadway sensors?
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+            <div onclick="IELTSApp.showToast('✓ Chính xác! Band 8.5 Reading Analysis: Cảm biến tối ưu hóa chu kỳ đèn tín hiệu để giảm ùn tắc.', 'success')" style="cursor: pointer; display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 0.85rem; background: var(--brand-surface); border: 1px solid var(--brand-border); border-radius: var(--radius-sm); font-size: 0.86rem; font-weight: 500; color: var(--brand-primary); transition: all 0.15s ease;" title="Click to test answer">
+              <span style="width: 18px; height: 18px; border-radius: 50%; background: var(--brand-primary); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0;">✓</span>
+              <span>To dynamically calibrate signal intervals and ease traffic flow</span>
+            </div>
+            <div onclick="IELTSApp.showToast('⚠️ Chưa chính xác. Đọc lại đoạn B: Mục đích là lưu thông phương tiện, không phải phạt vi phạm.', 'warning')" style="cursor: pointer; display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 0.85rem; background: #FFFFFF; border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--text-secondary); transition: all 0.15s ease;" title="Click to test answer">
+              <span style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #D1D5DB; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0;"></span>
+              <span>To penalize drivers exceeding designated municipal speed limits</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-hairline);">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Question 1 of 10</span>
+          <a href="{{ url_for('reading') }}" class="btn btn-secondary btn-sm">Try live test →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CORE SKILLS SECTION -->
+<section class="section-spacer section-spacer-subtle">
+  <div class="container">
+    <div class="section-header-wrap center">
+      <span class="section-label">Foundation</span>
+      <h2 class="section-title">The Four Skills You Need</h2>
+      <p class="section-subtitle">
+        Structured modules designed strictly according to official Cambridge and British Council exam standards.
+      </p>
+    </div>
+
+    <div class="skills-2x2-grid">
+      <!-- Listening -->
+      <div class="skill-box-card skill-listening">
+        <div>
+          <span class="skill-tag-name">🎧 Listening</span>
+          <h3 class="skill-title">Authentic Audio &amp; Question Sets</h3>
+          <p class="skill-desc">
+            Practice with native British, Australian, and North American accents, real-time transcripts, and question sets designed exactly like the actual exam.
+          </p>
+        </div>
+        <div class="skill-footer-row">
+          <span class="skill-tests-count">Section 1 to Section 4</span>
+          <a href="{{ url_for('listening') }}" class="skill-cta-link">Practice Listening &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Reading -->
+      <div class="skill-box-card skill-reading">
+        <div>
+          <span class="skill-tag-name">📖 Reading</span>
+          <h3 class="skill-title">Academic Passages &amp; Speed Training</h3>
+          <p class="skill-desc">
+            Improve reading speed, skim-and-scan ability, and accuracy with academic texts across sciences, history, psychology, and technology.
+          </p>
+        </div>
+        <div class="skill-footer-row">
+          <span class="skill-tests-count">Academic &amp; General Modules</span>
+          <a href="{{ url_for('reading') }}" class="skill-cta-link">Practice Reading &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Writing -->
+      <div class="skill-box-card skill-writing">
+        <div>
+          <span class="skill-tag-name">✍️ Writing</span>
+          <h3 class="skill-title">Task 1 &amp; Task 2 Evaluation</h3>
+          <p class="skill-desc">
+            Practice Task 1 report analysis and Task 2 argumentative essays with real-time word counting, timing constraints, and criteria-based scoring.
+          </p>
+        </div>
+        <div class="skill-footer-row">
+          <span class="skill-tests-count">Band 9 Structure Guides</span>
+          <a href="{{ url_for('writing') }}" class="skill-cta-link">Practice Writing &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Speaking -->
+      <div class="skill-box-card skill-speaking">
+        <div>
+          <span class="skill-tag-name">🎙️ Speaking</span>
+          <h3 class="skill-title">Part 1, 2 &amp; 3 Interview Simulator</h3>
+          <p class="skill-desc">
+            Prepare for Part 1 intro questions, Part 2 long-turn cue cards with 1-minute prep timer, and Part 3 abstract discussions with voice recording.
+          </p>
+        </div>
+        <div class="skill-footer-row">
+          <span class="skill-tests-count">Microphone Audio Recording</span>
+          <a href="{{ url_for('speaking') }}" class="skill-cta-link">Practice Speaking &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PRACTICE SECTION ("Practice IELTS Every Day") -->
+<section class="section-spacer">
+  <div class="container">
+    <div class="section-header-wrap">
+      <span class="section-label">Curated Sessions</span>
+      <h2 class="section-title">Practice IELTS Every Day</h2>
+      <p class="section-subtitle">
+        Short, targeted sessions designed to maintain daily consistency and sharpen your test-taking instincts.
+      </p>
+    </div>
+
+    <div class="practice-sequence-list">
+      <!-- 01 Reading -->
+      <div class="practice-seq-item">
+        <div>
+          <div class="seq-number">01</div>
+          <h3 class="seq-title">Reading Practice</h3>
+          <p class="seq-desc">
+            Passage: The Rise of Smart Cities<br>
+            Questions: 10 items<br>
+            Time: 20 mins
+          </p>
+        </div>
+        <a href="{{ url_for('reading') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+          Start &rarr;
+        </a>
+      </div>
+
+      <!-- 02 Listening -->
+      <div class="practice-seq-item">
+        <div>
+          <div class="seq-number">02</div>
+          <h3 class="seq-title">Listening Practice</h3>
+          <p class="seq-desc">
+            Audio: Marine Biology &amp; Coral Reefs<br>
+            Questions: 8 items<br>
+            Time: 15 mins
+          </p>
+        </div>
+        <a href="{{ url_for('listening') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+          Start &rarr;
+        </a>
+      </div>
+
+      <!-- 03 Writing -->
+      <div class="practice-seq-item">
+        <div>
+          <div class="seq-number">03</div>
+          <h3 class="seq-title">Writing Task 2</h3>
+          <p class="seq-desc">
+            Topic: AI in Modern Education<br>
+            Target: 250 words<br>
+            Time: 40 mins
+          </p>
+        </div>
+        <a href="{{ url_for('writing') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+          Start &rarr;
+        </a>
+      </div>
+
+      <!-- 04 Speaking -->
+      <div class="practice-seq-item">
+        <div>
+          <div class="seq-number">04</div>
+          <h3 class="seq-title">Speaking Part 2</h3>
+          <p class="seq-desc">
+            Cue card: Environmental Conservation<br>
+            Target: 2 minutes speech<br>
+            Time: 3 mins
+          </p>
+        </div>
+        <a href="{{ url_for('speaking') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+          Start &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. VOCABULARY SECTION ("Build Your IELTS Vocabulary") -->
+<section class="section-spacer section-spacer-subtle">
+  <div class="container">
+    <div class="vocab-feature-layout">
+      <div>
+        <span class="section-label">Academic Lexicon</span>
+        <h2 class="section-title">Build Your IELTS Vocabulary</h2>
+        <p class="section-subtitle" style="margin-bottom: 2rem;">
+          Learn high-frequency academic words curated specifically for IELTS Reading, Writing, and Speaking, complete with precise band-level collocations.
+        </p>
+
+        <div class="vocab-categories-list">
+          <div class="vocab-cat-row">
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">Environment &amp; Climate Change</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">degradation, renewable, sustainable, emission</div>
+            </div>
+            <span class="badge">48 words</span>
+          </div>
+
+          <div class="vocab-cat-row">
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">Technology &amp; Artificial Intelligence</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">automation, ubiquitous, proliferate, algorithmic</div>
+            </div>
+            <span class="badge">52 words</span>
+          </div>
+
+          <div class="vocab-cat-row">
+            <div>
+              <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">Education &amp; Academic Research</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">pedagogy, empirical, curriculum, cognitive</div>
+            </div>
+            <span class="badge">40 words</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+          <a href="{{ url_for('vocabulary') }}" class="btn btn-primary">
+            Explore 1,000+ Words &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature Card Preview: environment -->
+      <div>
+        <div class="vocab-sample-card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem;">
+            <span class="badge badge-primary">Band 7.0+ Academic</span>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Topic: Ecology</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">environment</h3>
+            <span style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-muted);">/ɪnˈvaɪ.rən.mənt/</span>
+            <span style="font-size: 0.85rem; font-style: italic; color: var(--text-secondary);">noun</span>
+          </div>
+
+          <div style="margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-hairline);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">
+              Common Collocations
+            </div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem;">
+              <li style="font-size: 0.9rem; color: var(--text-secondary);">• <strong>protect</strong> the environment</li>
+              <li style="font-size: 0.9rem; color: var(--text-secondary);">• environmental <strong>degradation</strong></li>
+              <li style="font-size: 0.9rem; color: var(--text-secondary);">• <strong>sustainable</strong> environmental practices</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 1.75rem;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">
+              Authentic IELTS Example
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-primary); line-height: 1.6; background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-hairline);">
+              &ldquo;Rapid industrialization has contributed significantly to environmental degradation in developing nations.&rdquo;
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <button onclick="IELTSApp.showToast('✓ Đã lưu từ vựng vào bộ Flashcard cá nhân!')" class="btn btn-primary btn-sm" style="flex: 1;">
+              Learn this word
+            </button>
+            <button onclick="IELTSApp.playVocabAudioWithWave('environment')" class="btn btn-secondary btn-sm" title="Listen to pronunciation">
+              <span class="soundwave-box" id="home-soundwave">
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+              </span>
+              <span>Pronounce</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. AI WRITING FEEDBACK PREVIEW -->
+<section class="section-spacer">
+  <div class="container">
+    <div class="writing-feature-layout">
+      <div>
+        <span class="section-label">Official Rubric</span>
+        <h2 class="section-title">Get Feedback. Improve Faster.</h2>
+        <p class="section-subtitle" style="margin-bottom: 1.75rem;">
+          Instant criteria evaluation based on official IELTS band descriptors. Stop guessing why your score stays at 6.0 and identify precise steps to reach Band 7.5+.
+        </p>
+
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+          <li style="display: flex; gap: 0.75rem; font-size: 0.92rem; color: var(--text-secondary);">
+            <span style="color: var(--brand-primary); font-weight: 700;">✓</span>
+            <span><strong>Task Response:</strong> Validates paragraph depth, clear thesis, and complete answers to all prompt prompts.</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; font-size: 0.92rem; color: var(--text-secondary);">
+            <span style="color: var(--brand-primary); font-weight: 700;">✓</span>
+            <span><strong>Coherence &amp; Cohesion:</strong> Checks logical progression, paragraphing, and cohesive linking devices.</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; font-size: 0.92rem; color: var(--text-secondary);">
+            <span style="color: var(--brand-primary); font-weight: 700;">✓</span>
+            <span><strong>Lexical Resource:</strong> Identifies academic collocations, idiomatic phrases, and repetitive word choices.</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; font-size: 0.92rem; color: var(--text-secondary);">
+            <span style="color: var(--brand-primary); font-weight: 700;">✓</span>
+            <span><strong>Grammar &amp; Accuracy:</strong> Analyzes complex sentences, participle clauses, and punctuation precision.</span>
+          </li>
+        </ul>
+
+        <a href="{{ url_for('writing') }}" class="btn btn-primary">
+          Practice Writing Essay &rarr;
+        </a>
+      </div>
+
+      <!-- Rubric Preview Card -->
+      <div>
+        <div class="criteria-rubric-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-hairline);">
+            <div>
+              <span class="badge">Task 2 Academic Essay</span>
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-top: 0.35rem;">
+                Artificial Intelligence in Education
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Overall Band</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--brand-primary); line-height: 1;">7.0</div>
+            </div>
+          </div>
+
+          <!-- 4 Criteria Breakdown (Intellectual Color-Coded) -->
+          <div class="criteria-grid-preview">
+            <div class="criteria-item-box crit-tr">
+              <div class="criteria-name-lbl">Task Response</div>
+              <div class="criteria-score-val">7.0</div>
+            </div>
+            <div class="criteria-item-box crit-cc">
+              <div class="criteria-name-lbl">Coherence</div>
+              <div class="criteria-score-val">6.5</div>
+            </div>
+            <div class="criteria-item-box crit-lr">
+              <div class="criteria-name-lbl">Lexical</div>
+              <div class="criteria-score-val">7.0</div>
+            </div>
+            <div class="criteria-item-box crit-gr">
+              <div class="criteria-name-lbl">Grammar</div>
+              <div class="criteria-score-val">8.0</div>
+            </div>
+          </div>
+
+          <!-- Official Examiner Feedback Quote -->
+          <div class="ai-eval-quote-box">
+            <strong>Examiner Feedback:</strong> &ldquo;Strong arguments and good use of academic vocabulary. To reach Band 7.5, improve paragraph transitions in the body sections and avoid overusing repetitive conjunctions like 'Moreover'.&rdquo;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. PROGRESS TRACKER SECTION -->
+<section class="section-spacer section-spacer-subtle">
+  <div class="container">
+    <div class="section-header-wrap">
+      <span class="section-label">Continuous Assessment</span>
+      <h2 class="section-title">Track Your Progress</h2>
+      <p class="section-subtitle">
+        Monitor your overall estimated band score and skill breakdowns across all completed mock tests.
+      </p>
+    </div>
+
+    <div class="progress-card-strip">
+      <div class="progress-overall-col">
+        <span class="badge badge-primary">Overall Band</span>
+        <div class="progress-overall-number">
+          {{ summary.avg_band if summary and summary.avg_band else '7.0' }}
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+          {{ summary.total_sessions if summary else 14 }} sessions completed
+        </div>
+      </div>
+
+      <div class="skills-progress-bars">
+        <div class="skill-prog-box" style="border-top: 2px solid var(--intellect-indigo);">
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--intellect-indigo); text-transform: uppercase;">Listening</div>
+          <div style="font-size: 1.85rem; font-weight: 800; color: var(--intellect-indigo); margin: 0.35rem 0;">
+            {{ summary.skills.listening.band if summary and summary.skills and summary.skills.listening and summary.skills.listening.band else '7.5' }}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--status-success); font-weight: 600;">+0.5 this week</div>
+        </div>
+
+        <div class="skill-prog-box" style="border-top: 2px solid var(--intellect-azure);">
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--intellect-azure); text-transform: uppercase;">Reading</div>
+          <div style="font-size: 1.85rem; font-weight: 800; color: var(--intellect-azure); margin: 0.35rem 0;">
+            {{ summary.skills.reading.band if summary and summary.skills and summary.skills.reading and summary.skills.reading.band else '7.0' }}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 500;">Consistent</div>
+        </div>
+
+        <div class="skill-prog-box" style="border-top: 2px solid var(--intellect-amber);">
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--intellect-amber); text-transform: uppercase;">Writing</div>
+          <div style="font-size: 1.85rem; font-weight: 800; color: var(--intellect-amber); margin: 0.35rem 0;">
+            {{ summary.skills.writing.band if summary and summary.skills and summary.skills.writing and summary.skills.writing.band else '6.5' }}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--intellect-amber); font-weight: 600;">In progress</div>
+        </div>
+
+        <div class="skill-prog-box" style="border-top: 2px solid var(--intellect-emerald);">
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--intellect-emerald); text-transform: uppercase;">Speaking</div>
+          <div style="font-size: 1.85rem; font-weight: 800; color: var(--intellect-emerald); margin: 0.35rem 0;">
+            {{ summary.skills.speaking.band if summary and summary.skills and summary.skills.speaking and summary.skills.speaking.band else '7.0' }}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--status-success); font-weight: 600;">Fluent</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="{{ url_for('history') }}" class="btn btn-secondary">
+        View Complete Test History &amp; Analytics &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "write-t1-01",
+    "task_type": "task1",
+    "category": "Academic - Line Graph",
+    "title": "Renewable Energy Consumption in 4 Nations (2005 - 2025)",
+    "prompt": "The line graph below shows the percentage of total energy generated from renewable sources in four countries—Germany, Sweden, the UK, and Australia—between 2005 and 2025, with projections up to 2030.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    "time_limit_minutes": 20,
+    "recommended_words": 150,
+    "sample_essay": "The line graph illustrates the proportion of renewable energy in the overall power production of four nations—Germany, Sweden, the United Kingdom, and Australia—from 2005 to 2025, with forecasted figures extending to 2030.\n\nOverall, all four countries witnessed an upward trajectory in their reliance on renewable energy, with Sweden consistently dominating the group throughout the given timeframe. Furthermore, while the UK exhibited the most dramatic acceleration, Australia experienced comparatively sluggish progress.\n\nIn 2005, Sweden commenced with the highest share at approximately 38%, before rising steadily to exceed 55% by 2025 and is anticipated to reach an unprecedented peak of 62% by 2030. In contrast, the United Kingdom started from a modest baseline of merely 5% in 2005. However, following substantial investments after 2012, its green energy percentage climbed steeply, surpassing Germany around 2022 to record 44% in 2025, and is expected to hit 50% by 2030.\n\nMeanwhile, Germany saw a consistent and substantial increase from 12% in 2005 to 40% in 2025. Conversely, Australia showed the least pronounced growth, hovering between 7% and 15% across the twenty-year period, with projections suggesting a marginal rise to just under 18% by the decade's end.",
+    "key_vocab": [
+      {"word": "upward trajectory", "meaning": "xu hướng đi lên"},
+      {"word": "modest baseline", "meaning": "mức xuất phát điểm khiêm tốn"},
+      {"word": "climbed steeply", "meaning": "tăng vọt mạnh mẽ"},
+      {"word": "sluggish progress", "meaning": "sự tiến triển chậm chạp"},
+      {"word": "unprecedented peak", "meaning": "đỉnh cao chưa từng có"}
+    ],
+    "rubric_tips": [
+      "Task Achievement: Phải có câu Overall chỉ ra xu hướng chung và quốc gia dẫn đầu/thấp nhất.",
+      "Coherence & Cohesion: Nhóm thông tin logic (Nhóm tăng trưởng mạnh: Sweden & UK; Nhóm còn lại: Germany & Australia).",
+      "Lexical Resource: Sử dụng đa dạng các từ vựng chỉ xu hướng và biến đổi số liệu.",
+      "Grammatical Accuracy: Sử dụng đúng thì quá khứ (2005-2025) và thì tương lai/dự đoán (2030)."
+    ]
+  },
+  {
+    "id": "write-t2-01",
+    "task_type": "task2",
+    "category": "Opinion Essay (Agree or Disagree)",
+    "title": "Artificial Intelligence & Human Teachers",
+    "prompt": "With recent advancements in artificial intelligence and digital tutoring applications, some people argue that human teachers will eventually become obsolete and be entirely replaced by AI systems.\n\nTo what extent do you agree or disagree with this statement?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    "time_limit_minutes": 40,
+    "recommended_words": 250,
+    "sample_essay": "In recent years, unprecedented breakthroughs in artificial intelligence have revolutionized educational paradigms, leading some to postulate that automated pedagogical algorithms will render conventional human educators obsolete. While I concede that intelligent software can optimize personalized drills and factual dissemination, I fundamentally disagree with the notion that artificial systems can wholly supersede the pedagogical and pastoral role of human teachers.\n\nAdmittedly, AI-driven learning platforms demonstrate unmatched proficiency in cognitive personalization and real-time knowledge assessment. Unlike a single educator overseeing an overcrowded classroom, diagnostic algorithms can dynamically calibrate curriculum difficulty according to each student's learning pace, pinpoint specific conceptual deficits, and provide instantaneous feedback. For instance, intelligent language apps analyze grammatical syntax and lexical retention far more swiftly than traditional homework grading, thereby liberating students from uniform schedules.\n\nNevertheless, the quintessence of teaching transcends mere cognitive information transfer; it is fundamentally an empathetic, socio-emotional vocation. Human instructors impart critical soft skills—including moral discernment, philosophical inquiry, resilience, and collaborative teamwork—which algorithmic models cannot genuinely simulate. A teacher acts as a mentor who perceives subtle emotional distress, nurtures intrinsic motivation during academic burnout, and instills ethical conscience. Moreover, in primary and secondary education, interpersonal bonding and social accountability cultivate civic responsibility, facets inherently devoid in mechanized interactions with screens.\n\nIn conclusion, although artificial intelligence will undeniably serve as an indispensable auxiliary tool that streamlines academic diagnostics and administrative tasks, it cannot replace human educators. The core of education remains intrinsically interpersonal, demanding empathy, inspiration, and moral guidance that only sentient mentors can provide.",
+    "key_vocab": [
+      {"word": "render obsolete", "meaning": "khiến cái gì đó trở nên lỗi thời"},
+      {"word": "pedagogical paradigms", "meaning": "mô hình sư phạm"},
+      {"word": "socio-emotional vocation", "meaning": "nghề nghiệp mang tính xã hội và cảm xúc"},
+      {"word": "dynamic calibration", "meaning": "sự điều chỉnh động theo thời gian thực"},
+      {"word": "indispensable auxiliary tool", "meaning": "công cụ hỗ trợ không thể thiếu"}
+    ],
+    "rubric_tips": [
+      "Task Response: Trả lời rõ ràng quan điểm ('fundamentally disagree') ngay từ mở bài và bảo toàn xuyên suốt.",
+      "Coherence: Dùng cấu trúc nhượng bộ (Admittedly... Nevertheless...) tạo tính khách quan, chặt chẽ.",
+      "Lexical: Sử dụng từ ngữ học thuật C1-C2 (pedagogical, supersede, quintessence, intrinsic).",
+      "Grammar: Kết hợp nhuần nhuyễn mệnh đề quan hệ, câu phức và đảo ngữ nếu phù hợp."
+    ]
+  }
+]

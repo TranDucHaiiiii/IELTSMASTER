@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Progress & History - IELTSMASTER{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 3.5rem;">
+  <!-- Header -->
+  <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-hairline); padding-bottom: 0.75rem;">
+    <h1 style="font-size: 1.35rem; margin-bottom: 0.25rem;">Progress & Learning History</h1>
+    <p style="font-size: 0.88rem; color: var(--text-muted);">
+      Cumulative performance metrics and past practice records
+    </p>
+  </div>
+
+  <!-- Minimal Band Breakdown Bar -->
+  <div class="panel" style="margin-bottom: 2.5rem;">
+    <div class="panel-header">
+      <span style="font-size: 0.95rem; font-weight: 600;">Overall Band Summary</span>
+      <span class="badge badge-success">Target: Band 7.5</span>
+    </div>
+    <div class="panel-body">
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; text-align: center;">
+        <div style="padding: 1rem; border-right: 1px solid var(--border-hairline);">
+          <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 500;">Overall</span>
+          <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-top: 0.25rem;">7.0</div>
+        </div>
+
+        <div style="padding: 1rem; border-right: 1px solid var(--border-hairline);">
+          <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 500;">Reading</span>
+          <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">7.5</div>
+        </div>
+
+        <div style="padding: 1rem; border-right: 1px solid var(--border-hairline);">
+          <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 500;">Listening</span>
+          <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">7.5</div>
+        </div>
+
+        <div style="padding: 1rem; border-right: 1px solid var(--border-hairline);">
+          <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 500;">Writing</span>
+          <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">6.5</div>
+        </div>
+
+        <div style="padding: 1rem;">
+          <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 500;">Speaking</span>
+          <div style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">6.5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test History Section -->
+  <div class="panel" style="margin-bottom: 2rem;">
+    <div class="panel-header">
+      <span style="font-size: 0.95rem; font-weight: 600;">Reading & Listening Practice Sessions</span>
+    </div>
+
+    {% if tests %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Test Name</th>
+          <th>Raw Score</th>
+          <th>Band Score</th>
+          <th>Time Elapsed</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tests %}
+        <tr>
+          <td><span class="badge">{{ t.test_type }}</span></td>
+          <td style="font-weight: 500;">{{ t.test_title }}</td>
+          <td>{{ t.score }} / {{ t.max_score }}</td>
+          <td><strong>Band {{ t.band_score }}</strong></td>
+          <td style="color: var(--text-muted);">{{ (t.time_spent_seconds // 60) }}m {{ (t.time_spent_seconds % 60) }}s</td>
+          <td style="color: var(--text-muted); font-size: 0.82rem;">{{ t.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="padding: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+      No practice tests recorded yet.
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Writing Submissions -->
+  <div class="panel">
+    <div class="panel-header">
+      <span style="font-size: 0.95rem; font-weight: 600;">Writing Submissions</span>
+    </div>
+
+    {% if writings %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Prompt Title</th>
+          <th>Word Count</th>
+          <th>Estimated Band</th>
+          <th>Date Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in writings %}
+        <tr>
+          <td><span class="badge">{{ w.task_type|upper }}</span></td>
+          <td style="font-weight: 500;">{{ w.prompt_title }}</td>
+          <td>{{ w.word_count }} words</td>
+          <td><strong>Band {{ w.estimated_band }}</strong></td>
+          <td style="color: var(--text-muted); font-size: 0.82rem;">{{ w.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="padding: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+      No written essays submitted yet.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
