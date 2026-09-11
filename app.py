@@ -18,7 +18,7 @@ from database import (
 from vocab_service import get_or_fetch_vocabulary
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ielts-master-secret-key-2026'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'ielts-master-secret-key-2026')
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
@@ -546,11 +546,12 @@ def dashboard_stats():
 
 if __name__ == '__main__':
     import sys
+    port = int(os.environ.get('PORT', 5000))
     try:
         sys.stdout.reconfigure(encoding='utf-8')
     except Exception:
         pass
     print("=" * 60)
-    print(">> IELTS Master Hub dang khoi chay tai http://127.0.0.1:5000")
+    print(f">> IELTS Master Hub dang khoi chay tai http://0.0.0.0:{port}")
     print("=" * 60)
-    app.run(debug=True, port=5000, host='127.0.0.1')
+    app.run(debug=False, port=port, host='0.0.0.0')
